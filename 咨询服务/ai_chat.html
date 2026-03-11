@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>桌面开运顾问 · 小棠</title>
+  <style>
+    :root {
+      --bg: #fff7fb;
+      --paper: rgba(255,255,255,.84);
+      --ink: #4a3a46;
+      --muted: #8e7283;
+      --line: #f1dbe4;
+      --accent: #c88fb1;
+      --accent-2: #df9eb8;
+      --soft: #fff0f6;
+      --lavender: #f8f3ff;
+      --shadow: rgba(200,143,177,.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(223,158,184,.22), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 22%),
+        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+    .page { max-width: 1080px; margin: 0 auto; padding: 26px 18px 48px; }
+    .hero, .card {
+      background: var(--paper);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 20px 46px var(--shadow);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.34), transparent 24%),
+        radial-gradient(circle at left bottom, rgba(255,244,250,.26), transparent 28%),
+        linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
+      color: #fffafd;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -36px;
+      top: -42px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      filter: blur(4px);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    .hero p { margin: 0; color: rgba(255,250,253,.92); }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      font-size: 13px;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+    .hero-copy {
+      max-width: 620px;
+    }
+    .profile-panel {
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.16);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+      backdrop-filter: blur(10px);
+    }
+    .profile-top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.14));
+      border: 1px solid rgba(255,255,255,.24);
+      box-shadow: 0 12px 24px rgba(123,78,101,.14);
+    }
+    .profile-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .profile-sub {
+      font-size: 13px;
+      color: rgba(255,250,253,.82);
+    }
+    .profile-note {
+      font-size: 14px;
+      color: rgba(255,250,253,.92);
+    }
+    .profile-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .profile-pill {
+      border-radius: 18px;
+      padding: 12px 12px 10px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.16);
+      font-size: 13px;
+      color: rgba(255,250,253,.92);
+    }
+    .profile-pill strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+    .layout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+    .welcome-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 6px;
+    }
+    .welcome-card {
+      position: relative;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.24) 0%, rgba(255,249,252,.16) 100%);
+      padding: 16px 16px 14px;
+      box-shadow: 0 14px 28px rgba(145,92,118,.10);
+    }
+    .welcome-card::before {
+      content: "";
+      display: block;
+      width: 34px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.56);
+      margin-bottom: 12px;
+    }
+    .welcome-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .welcome-card div { color: rgba(255,250,253,.9); font-size: 14px; }
+    .mini-home {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .mini-home-card {
+      border-radius: 20px;
+      padding: 14px 14px 12px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .mini-home-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #fff;
+    }
+    .mini-home-card span {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,250,253,.88);
+    }
+    .chat-shell { display: flex; flex-direction: column; min-height: 680px; }
+    .chat-cover {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .cover-main,
+    .cover-side {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+      box-shadow: 0 12px 28px rgba(200,143,177,.08);
+    }
+    .cover-main {
+      padding: 18px;
+      background:
+        radial-gradient(circle at top right, rgba(223,158,184,.12), transparent 24%),
+        linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+    }
+    .cover-side {
+      padding: 16px;
+    }
+    .cover-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff0f6;
+      color: var(--accent);
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .cover-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .cover-desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .cover-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .cover-point {
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid #f4dfe8;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .cover-point strong {
+      display: block;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .featured-groups {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .featured-group {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #f3dfe8;
+      border-radius: 24px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fff9fc 100%);
+      box-shadow: 0 16px 30px rgba(200,143,177,.10);
+    }
+    .featured-group::after {
+      content: "";
+      position: absolute;
+      right: -26px;
+      top: -26px;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      opacity: .28;
+      background: rgba(255,255,255,.55);
+      filter: blur(2px);
+    }
+    .featured-group.wealth {
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 26%),
+        linear-gradient(135deg, #ffe7ef 0%, #ffd6dd 55%, #ffc9d4 100%);
+      border-color: #f6cfd8;
+    }
+    .featured-group.focus {
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 26%),
+        linear-gradient(135deg, #fce8ff 0%, #eddcff 52%, #dfd4ff 100%);
+      border-color: #e7d5fb;
+    }
+    .featured-group.calm {
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 26%),
+        linear-gradient(135deg, #ffeeda 0%, #ffe5ca 52%, #ffdcb8 100%);
+      border-color: #f3d7b2;
+    }
+    .featured-group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .featured-group-head strong {
+      color: #7a5267;
+      font-size: 15px;
+    }
+    .featured-group-head span {
+      color: rgba(90,67,81,.72);
+      font-size: 12px;
+    }
+    .featured-cover {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 10px;
+    }
+    .cover-illu {
+      border-radius: 20px;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      background: rgba(255,255,255,.34);
+      border: 1px solid rgba(255,255,255,.4);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+    }
+    .cover-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cover-copy strong {
+      display: block;
+      font-size: 16px;
+      color: #654759;
+      margin-bottom: 6px;
+    }
+    .cover-copy span {
+      display: block;
+      font-size: 13px;
+      color: rgba(90,67,81,.78);
+      line-height: 1.65;
+    }
+    .featured-list {
+      display: grid;
+      gap: 8px;
+    }
+    .featured-card {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 18px;
+      background: rgba(255,255,255,.42);
+      padding: 13px 14px;
+      cursor: pointer;
+      font: inherit;
+      color: var(--ink);
+      box-shadow: 0 10px 20px rgba(200,143,177,.08);
+      backdrop-filter: blur(4px);
+    }
+    .featured-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #7b5468;
+    }
+    .featured-card span {
+      display: block;
+      color: rgba(88,68,80,.78);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .messages {
+      flex: 1;
+      overflow: auto;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .msg {
+      max-width: 86%;
+      padding: 14px 16px;
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(200,143,177,.08);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg.ai {
+      align-self: flex-start;
+      background: linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+      border: 1px solid var(--line);
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #d892b0, #c785a5);
+      color: #fff;
+    }
+    .msg small {
+      display: block;
+      margin-bottom: 6px;
+      opacity: .72;
+      font-size: 12px;
+    }
+    .msg.thinking {
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+      border: 1px dashed #e8cad8;
+      color: var(--muted);
+    }
+    .thinking-dots {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .thinking-dots i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d9a6bd;
+      display: inline-block;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    .thinking-dots i:nth-child(2) { animation-delay: .15s; }
+    .thinking-dots i:nth-child(3) { animation-delay: .3s; }
+    .composer {
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 104px;
+      resize: vertical;
+      border-radius: 18px;
+      border: 1px solid #ead7e2;
+      background: rgba(255,255,255,.9);
+      padding: 14px 16px;
+      font: inherit;
+      color: var(--ink);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(200,143,177,.14);
+    }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font: inherit;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(200,143,177,.22);
+    }
+    .btn.soft { background: var(--soft); }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .info-box, .note {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+    }
+    .note { background: var(--lavender); }
+    .route-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .route-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 15px;
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+    }
+    .route-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+    .route-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .today-asks {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .today-item {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+      padding: 12px 13px;
+    }
+    .today-item strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .today-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .status { font-size: 13px; color: var(--muted); }
+    .status.error { color: #c26b86; }
+    .card h2::before {
+      content: "✿";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    @keyframes blink {
+      0%, 80%, 100% { transform: scale(.8); opacity: .45; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    @media (max-width: 860px) {
+      .hero-grid,
+      .layout { grid-template-columns: 1fr; }
+      .chat-cover,
+      .cover-points,
+      .welcome-strip,
+      .mini-home,
+      .profile-points { grid-template-columns: 1fr; }
+      .chat-shell { min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-intro">
+          <div class="hero-copy">
+            <div class="eyebrow">🌷 Gemini AI 轻咨询入口</div>
+            <h1>桌面开运顾问 · 小棠</h1>
+            <p>如果你现在只是有点拿不准，不知道该先调整哪里，可以先来问问我。我会先帮你梳理困扰，再给你一些轻量、低调、日常也容易执行的小建议。</p>
+            <div class="hero-badges">
+              <span class="badge">偏女生审美</span>
+              <span class="badge">不夸张的桌面建议</span>
+              <span class="badge">先答疑，再引导正式服务</span>
+            </div>
+          </div>
+
+          <div class="welcome-strip">
+            <div class="welcome-card">
+              <strong>适合先来问一问</strong>
+              <div>如果你只是有点不顺、有点乱、有点拿不准，这里最适合先聊一聊。</div>
+            </div>
+            <div class="welcome-card">
+              <strong>不会一上来就很重</strong>
+              <div>我会先给你轻量建议，优先考虑低调、舒服、办公桌也能用的方案。</div>
+            </div>
+            <div class="welcome-card">
+              <strong>需要更细再升级</strong>
+              <div>等你想更认真看自己的工位情况时，再去填表或做正式诊断就好。</div>
+            </div>
+          </div>
+
+          <div class="mini-home">
+            <div class="mini-home-card">
+              <strong>你可以先问</strong>
+              <span>开放工位、背后过道、桌面杂乱、想低调招财这类小问题。</span>
+            </div>
+            <div class="mini-home-card">
+              <strong>我会先帮你</strong>
+              <span>判断应该先整理哪里，再给你更贴近日常办公环境的建议。</span>
+            </div>
+            <div class="mini-home-card">
+              <strong>如果更想认真看</strong>
+              <span>再自然转到表单诊断，不会一开始就让流程变得很重。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-panel">
+          <div class="profile-top">
+            <div class="avatar">🌸</div>
+            <div>
+              <div class="profile-name">小棠 · 你的桌面顾问</div>
+              <div class="profile-sub">更偏温柔、耐看、适合女生工位的小调整思路</div>
+            </div>
+          </div>
+          <div class="profile-note">这页更像一个卡片式顾问主页：你可以先把这里当成一个轻量试聊入口，不用准备得很完整，也不用担心问题太小。</div>
+          <div class="profile-points">
+            <div class="profile-pill">
+              <strong>风格偏好</strong>
+              低饱和、软糯感、办公场景也不会突兀。
+            </div>
+            <div class="profile-pill">
+              <strong>建议方式</strong>
+              先从整理、位置、视线感受开始，不会先让你买很多东西。
+            </div>
+            <div class="profile-pill">
+              <strong>适合人群</strong>
+              想悄悄把工位变舒服、变顺眼、变有一点点好运感的人。
+            </div>
+            <div class="profile-pill">
+              <strong>继续方式</strong>
+              先聊聊 → 看电子书 / 填表单 → 再进正式诊断。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="card chat-shell">
+        <h2>即时答疑</h2>
+        <div class="chat-cover">
+          <div class="cover-main">
+            <div class="cover-tag">💗 小红书风轻咨询</div>
+            <div class="cover-title">先不用把问题想得很完整，也可以开始聊。</div>
+            <div class="cover-desc">你只要说出一个最别扭的小点，比如“背后空”“桌面乱”“想低调一点招财”，我就能先帮你拆出第一步。</div>
+            <div class="cover-points">
+              <div class="cover-point">
+                <strong>先说感受</strong>
+                例如最近烦躁、压迫感强、坐着总不踏实。
+              </div>
+              <div class="cover-point">
+                <strong>再说场景</strong>
+                比如开放工位、靠走道、桌面小、东西多。
+              </div>
+              <div class="cover-point">
+                <strong>最后说偏好</strong>
+                喜欢低调温柔、不要太玄、最好也好看。
+              </div>
+            </div>
+          </div>
+          <div class="cover-side">
+            <h3 style="margin-bottom:8px;">今天适合先问</h3>
+            <div class="featured-groups" id="featuredQuestions">
+              <div class="featured-group wealth">
+                <div class="featured-group-head">
+                  <strong>招财感</strong>
+                  <span>低调、不夸张</span>
+                </div>
+                <div class="featured-cover">
+                  <div class="cover-illu">💗</div>
+                  <div class="cover-copy">
+                    <strong>像小红书封面的轻盈招财块</strong>
+                    <span>更偏氛围感和顺眼感，不会一眼看上去很用力，也更适合女生工位。</span>
+                  </div>
+                </div>
+                <div class="featured-list">
+                  <button class="featured-card" type="button" data-question="我想让工位有一点点招财感，但不要太明显，先从哪里调整比较好？">
+                    <strong>轻轻招财</strong>
+                    <span>适合想先从颜色、方位、桌面氛围开始的人。</span>
+                  </button>
+                </div>
+              </div>
+              <div class="featured-group focus">
+                <div class="featured-group-head">
+                  <strong>专注感</strong>
+                  <span>更稳、更顺手</span>
+                </div>
+                <div class="featured-cover">
+                  <div class="cover-illu">🫧</div>
+                  <div class="cover-copy">
+                    <strong>像效率博主封面的柔和专注块</strong>
+                    <span>先把视觉杂乱和注意力分散感压下来，再慢慢把工位气场收回来。</span>
+                  </div>
+                </div>
+                <div class="featured-list">
+                  <button class="featured-card" type="button" data-question="我想让工位看起来更顺一点，也更聚焦工作，第一步建议是什么？">
+                    <strong>顺眼又专注</strong>
+                    <span>适合桌面乱、事情多、最近状态不稳的时候。</span>
+                  </button>
+                </div>
+              </div>
+              <div class="featured-group calm">
+                <div class="featured-group-head">
+                  <strong>稳定感</strong>
+                  <span>温柔、安全感</span>
+                </div>
+                <div class="featured-cover">
+                  <div class="cover-illu">☁️</div>
+                  <div class="cover-copy">
+                    <strong>像治愈系封面的安心稳定块</strong>
+                    <span>适合先缓解背后空、压迫感、坐不住这类不安，再做更细的调整。</span>
+                  </div>
+                </div>
+                <div class="featured-list">
+                  <button class="featured-card" type="button" data-question="我背后是过道，又不想摆很明显的东西，能不能先给我一点低调建议？">
+                    <strong>低调化解不安感</strong>
+                    <span>适合开放工位、背后空、容易分心的人。</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="messages" id="messages"></div>
+
+        <div class="composer">
+          <div class="chips" id="quickQuestions">
+            <button class="chip" type="button">背后是过道怎么办</button>
+            <button class="chip" type="button">开放工位怎么布置</button>
+            <button class="chip" type="button">想招财但要低调</button>
+            <button class="chip" type="button">提升专注力怎么摆</button>
+            <button class="chip" type="button">不想太玄学怎么调整</button>
+            <button class="chip" type="button">我适合先填表还是先看电子书</button>
+          </div>
+          <textarea id="userInput" placeholder="例如：我背后是过道，桌面不大，还不想摆太明显的东西，这种情况应该先调哪里？"></textarea>
+          <div class="row">
+            <button class="btn primary" id="sendBtn" type="button">发送问题</button>
+            <button class="btn soft" id="resetBtn" type="button">重新开始</button>
+            <a class="btn" id="consultBtn" href="客户信息收集表_网页版.html">直接填写表单</a>
+            <span class="status" id="statusText">可先简单问 2-5 个问题，再决定要不要正式诊断。</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h2>这位顾问能帮你什么</h2>
+        <div class="info-box">
+          <ul>
+            <li>帮你先说清楚现在最困扰的地方</li>
+            <li>给 2-4 条轻量建议，不会一下子让你买一堆东西</li>
+            <li>优先推荐低调、耐看、适合办公环境的思路</li>
+            <li>如果你需要更细一点的判断，会再引导你去填写表单</li>
+          </ul>
+        </div>
+
+        <h2 style="margin-top:18px;">适合什么时候用</h2>
+        <div class="note">
+          <ul>
+            <li>还在犹豫，不确定自己该不该做正式诊断</li>
+            <li>只是想先问一个小问题</li>
+            <li>想先看看自己的工位更适合什么风格</li>
+            <li>想知道电子书和表单诊断哪个更适合自己</li>
+          </ul>
+        </div>
+
+        <h2 style="margin-top:18px;">今日适合问的问题</h2>
+        <div class="today-asks">
+          <div class="today-item">
+            <strong>想变温柔一点，但别太刻意</strong>
+            <span>适合问桌面配色、收纳感、摆件存在感太强怎么处理。</span>
+          </div>
+          <div class="today-item">
+            <strong>最近状态乱，想先稳下来</strong>
+            <span>适合问桌面杂乱、压迫感、注意力不集中这类问题。</span>
+          </div>
+          <div class="today-item">
+            <strong>想轻轻招财，但别太明显</strong>
+            <span>适合问低调摆放、颜色取向、适合办公环境的小调整。</span>
+          </div>
+        </div>
+
+        <h2 style="margin-top:18px;">聊完之后怎么继续</h2>
+        <div class="route-grid">
+          <div class="route-card">
+            <strong>想先慢慢看整体思路</strong>
+            <div>如果你现在更想自己先了解完整框架，可以先看电子书版本，适合慢慢入门。</div>
+            <div class="route-actions">
+              <a class="btn soft" id="ebookBtn" href="../电子书/打工人办公桌开运指南_精装版.html">先看电子书</a>
+            </div>
+          </div>
+          <div class="route-card">
+            <strong>想按自己的工位情况认真看</strong>
+            <div>如果你已经知道自己困扰在哪，最适合直接填写表单，我会按你的实际情况整理建议。</div>
+            <div class="route-actions">
+              <a class="btn primary" id="consultSideBtn" href="客户信息收集表_网页版.html">去填写表单</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const statusEl = document.getElementById('statusText');
+    const consultBtn = document.getElementById('consultBtn');
+    const consultSideBtn = document.getElementById('consultSideBtn');
+    const ebookBtn = document.getElementById('ebookBtn');
+    const featuredQuestionsEl = document.getElementById('featuredQuestions');
+    const history = [];
+    const maxTurns = 10;
+
+    function addMessage(role, text) {
+      const item = document.createElement('div');
+      item.className = 'msg ' + role;
+      const who = role === 'ai' ? '小棠' : '你';
+      item.innerHTML = '<small>' + who + '</small>' + text.replace(/\n/g, '<br>');
+      messagesEl.appendChild(item);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addThinkingMessage() {
+      const item = document.createElement('div');
+      item.className = 'msg ai thinking';
+      item.id = 'thinkingMessage';
+      item.innerHTML = '<small>小棠</small><span class="thinking-dots"><i></i><i></i><i></i></span> 正在帮你慢慢整理思路...';
+      messagesEl.appendChild(item);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function removeThinkingMessage() {
+      const item = document.getElementById('thinkingMessage');
+      if (item) item.remove();
+    }
+
+    function resetChat() {
+      history.length = 0;
+      messagesEl.innerHTML = '';
+      addMessage('ai', '嗨，我是桌面开运顾问小棠。你可以先告诉我，你现在的工位最让你不舒服的是哪一点，我会先帮你梳理一下，再给你轻一点的建议 🌷');
+      statusEl.textContent = '可先简单问 2-5 个问题，再决定要不要正式诊断。';
+      statusEl.className = 'status';
+      inputEl.value = '';
+    }
+
+    async function sendMessage(text) {
+      const userText = (text || inputEl.value).trim();
+      if (!userText) return;
+      if (history.filter(item => item.role === 'user').length >= maxTurns) {
+        statusEl.textContent = '这一轮轻咨询已经差不多了，如果你想按自己的工位情况更细一点看，可以直接填写表单。';
+        statusEl.className = 'status error';
+        return;
+      }
+
+      addMessage('user', userText);
+      history.push({ role: 'user', content: userText });
+      inputEl.value = '';
+      sendBtn.disabled = true;
+      statusEl.textContent = '小棠正在整理你的问题...';
+      statusEl.className = 'status';
+      addThinkingMessage();
+
+      try {
+        const resp = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ history })
+        });
+        const result = await resp.json();
+        if (!result.success) throw new Error(result.message || '回复失败');
+
+        removeThinkingMessage();
+        addMessage('ai', result.reply);
+        history.push({ role: 'assistant', content: result.reply });
+        if (result.cta_url) {
+          consultBtn.href = result.cta_url;
+        }
+        statusEl.textContent = result.hint || '如果你想按自己的工位情况更细一点看，可以直接填写表单。';
+      } catch (error) {
+        removeThinkingMessage();
+        statusEl.textContent = '当前暂时没有连上 AI 顾问，请稍后再试。';
+        statusEl.className = 'status error';
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('quickQuestions').addEventListener('click', function(event) {
+      if (event.target.classList.contains('chip')) {
+        sendMessage(event.target.textContent);
+      }
+    });
+    featuredQuestionsEl.addEventListener('click', function(event) {
+      const card = event.target.closest('.featured-card');
+      if (card && card.dataset.question) {
+        sendMessage(card.dataset.question);
+      }
+    });
+    sendBtn.addEventListener('click', () => sendMessage());
+    resetBtn.addEventListener('click', resetChat);
+    inputEl.addEventListener('keydown', function(event) {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    fetch('../public_links.json')
+      .then(resp => resp.ok ? resp.json() : Promise.reject())
+      .then(config => {
+        if (config.consult_form_url) {
+          consultBtn.href = config.consult_form_url;
+          consultSideBtn.href = config.consult_form_url;
+          if (/^https?:\/\//.test(config.consult_form_url)) {
+            consultBtn.target = '_blank';
+            consultBtn.rel = 'noopener';
+            consultSideBtn.target = '_blank';
+            consultSideBtn.rel = 'noopener';
+          }
+        }
+        if (config.ebook_url) {
+          ebookBtn.href = config.ebook_url;
+          if (/^https?:\/\//.test(config.ebook_url)) {
+            ebookBtn.target = '_blank';
+            ebookBtn.rel = 'noopener';
+          }
+        }
+      })
+      .catch(() => {});
+
+    resetChat();
+  </script>
+</body>
+</html>

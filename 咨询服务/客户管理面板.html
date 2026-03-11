@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户管理面板 · 打工人桌面玄学</title>
+    <style>
+        :root {
+            --bg: #f0ebe3;
+            --paper: #fffdf8;
+            --ink: #2f2a24;
+            --muted: #74695d;
+            --gold: #b98a3b;
+            --gold-soft: #f3e7cf;
+            --line: #eadfce;
+            --green: #2d6a2e;
+            --green-soft: #e8f5e8;
+            --orange: #e67e22;
+            --orange-soft: #fef3e2;
+            --blue: #2980b9;
+            --blue-soft: #ebf5fb;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
+        }
+        .page { max-width: 1200px; margin: 0 auto; padding: 24px 18px 60px; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(59,42,18,.96), rgba(130,94,42,.92));
+            color: #fff9ef;
+            border-radius: 24px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 { font-size: 24px; }
+        .header-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-meta span {
+            background: rgba(255,255,255,.12);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+        }
+
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .stat-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .num { font-size: 32px; font-weight: 700; }
+        .stat-card .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+        .stat-card.pending .num { color: var(--orange); }
+        .stat-card.done .num { color: var(--green); }
+        .stat-card.revenue .num { color: var(--gold); }
+
+        /* Cards */
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+        .card h2 { font-size: 18px; margin-bottom: 14px; }
+
+        /* Mini cards */
+        .mini-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+        .mini-card {
+            background: var(--gold-soft);
+            border-radius: 14px;
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 120px;
+        }
+        .mini-card span { display: block; font-size: 12px; color: var(--muted); }
+        .mini-card strong { font-size: 20px; color: var(--gold); }
+
+        /* Bar chart */
+        .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .bar-label { width: 120px; font-size: 13px; text-align: right; flex-shrink: 0; }
+        .bar-bg { flex: 1; height: 24px; background: #f5efe5; border-radius: 12px; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #e6ba5e); border-radius: 12px; min-width: 4px; transition: width .5s; }
+        .bar-val { width: 30px; font-size: 13px; font-weight: 600; }
+
+        /* Table */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th {
+            background: #f8f2e8;
+            padding: 12px 10px;
+            font-size: 13px;
+            color: var(--muted);
+            text-align: left;
+            border-bottom: 2px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0ebe3;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        tr:hover td { background: #fdf8ef; }
+        .goals-cell { max-width: 200px; }
+
+        /* Status badges */
+        .status-pending { color: var(--orange); font-weight: 600; }
+        .status-done { color: var(--green); font-weight: 600; }
+        .status-archived { color: var(--muted); }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin: 2px;
+        }
+        .badge-report { background: var(--blue-soft); color: var(--blue); }
+        .badge-deliver { background: var(--green-soft); color: var(--green); }
+        .action-link {
+            display: inline-block;
+            margin: 2px 6px 2px 0;
+            padding: 4px 10px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 12px;
+            color: var(--blue);
+            background: var(--blue-soft);
+        }
+        .action-link:hover { filter: brightness(.97); }
+        .pwd-cell { display:inline-flex; align-items:center; gap:6px; }
+        .pwd-code { background:var(--gold-soft); color:var(--gold); padding:3px 10px;
+                     border-radius:8px; font-size:15px; font-weight:700; letter-spacing:3px;
+                     font-family:'Courier New',monospace; user-select:all; }
+        .pwd-copy { border:none; background:none; cursor:pointer; font-size:16px;
+                     color:var(--muted); padding:2px 4px; border-radius:6px; }
+        .pwd-copy:hover { background:var(--gold-soft); }
+        .auto-refresh-tip {
+            margin-top: 10px;
+            color: rgba(255,249,239,.82);
+            font-size: 12px;
+        }
+
+        /* Filter */
+        .filter-bar {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+        }
+        .filter-btn {
+            border: 1px solid var(--line);
+            background: #fff;
+            padding: 6px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .filter-btn.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .search-box {
+            padding: 8px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 13px;
+            flex: 1;
+            min-width: 180px;
+            max-width: 300px;
+        }
+
+        /* Print */
+        @media print {
+            body { background: #fff; }
+            .header { background: var(--ink); }
+            .filter-bar { display: none; }
+        }
+        @media (max-width: 720px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div>
+                <h1>📊 客户管理面板</h1>
+                <p style="opacity:.8;font-size:14px;margin-top:4px">打工人桌面玄学 · 咨询服务管理</p>
+                <div class="auto-refresh-tip">🔄 页面每 8 秒自动刷新一次，客户提交后会自动出现专属报告链接</div>
+            </div>
+            <div class="header-meta">
+                <span>📅 更新: 2026-03-11 22:58</span>
+                <span>👥 总客户: 2</span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card pending">
+                <div class="num">1</div>
+                <div class="label">⏳ 待处理</div>
+            </div>
+            <div class="stat-card done">
+                <div class="num">1</div>
+                <div class="label">✅ 已完成</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">1</div>
+                <div class="label">📄 已生成报告</div>
+            </div>
+            <div class="stat-card revenue">
+                <div class="num">¥99</div>
+                <div class="label">💰 累计收入</div>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+            <div class="card">
+                <h2>📦 服务档位分布</h2>
+                <div class="mini-grid"><div class='mini-card'><span>标准版(99元)</span><strong>2</strong></div></div>
+            </div>
+            <div class="card">
+                <h2>🎯 热门诉求 TOP 5</h2>
+                <div class='bar-row'>
+            <span class='bar-label'>提升专注力/效率</span>
+            <div class='bar-bg'><div class='bar-fill' style='width:100%'></div></div>
+            <span class='bar-val'>2</span>
+        </div><div class='bar-row'>
+            <span class='bar-label'>升职加薪</span>
+            <div class='bar-bg'><div class='bar-fill' style='width:100%'></div></div>
+            <span class='bar-val'>1</span>
+        </div><div class='bar-row'>
+            <span class='bar-label'>减少焦虑/内耗</span>
+            <div class='bar-bg'><div class='bar-fill' style='width:100%'></div></div>
+            <span class='bar-val'>1</span>
+        </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👥 客户列表</h2>
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterTable('all')">全部 (2)</button>
+                <button class="filter-btn" onclick="filterTable('pending')">⏳ 待处理 (1)</button>
+                <button class="filter-btn" onclick="filterTable('done')">✅ 已完成 (1)</button>
+                <button class="filter-btn" onclick="filterTable('archived')">🗃️ 已归档 (0)</button>
+                <input type="text" class="search-box" placeholder="🔍 搜索客户..." oninput="searchTable(this.value)" />
+            </div>
+            <div class="table-wrap">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>日期</th>
+                            <th>档位</th>
+                            <th>职业</th>
+                            <th>诉求</th>
+                            <th>预算</th>
+                            <th>状态</th>
+                            <th>🔑 密码</th>
+                            <th>进度</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr class="status-pending">
+        <td><strong>本地测试用户</strong></td>
+        <td>2026-03-11</td>
+        <td>标准版(99元)</td>
+        <td>产品经理</td>
+        <td class="goals-cell">提升专注力/效率</td>
+        <td>50-150元（基础方案）</td>
+        <td><span class='status-pending'>⏳ 待处理</span></td>
+        <td><span style='color:var(--muted);font-size:12px'>-</span></td>
+        <td> </td>
+        <td><span style='color:var(--muted);font-size:12px'>等待自动生成</span></td>
+    </tr>
+    <tr class="status-done">
+        <td><strong>小鱼</strong></td>
+        <td>2026-03-11</td>
+        <td>标准版(99元)</td>
+        <td>互联网产品经理</td>
+        <td class="goals-cell">升职加薪, 提升专注力/效率, 减少焦虑/内耗</td>
+        <td>50-150元（基础方案）</td>
+        <td><span class='status-done'>✅ 已完成</span></td>
+        <td><span style='color:var(--muted);font-size:12px'>-</span></td>
+        <td><span class='badge badge-report'>📄 有报告</span> <span class='badge badge-deliver'>📦 已打包</span></td>
+        <td><a class='action-link' href='输出报告/小鱼_2026-03-11/诊断报告.html' target='_blank'>查看HTML报告</a> <a class='action-link' href='输出报告/小鱼_2026-03-11/诊断报告.md' target='_blank'>查看文字版</a> <a class='action-link' href='交付包/小鱼_2026-03-11' target='_blank'>打开交付包</a></td>
+    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🚀 快速操作指引</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px">
+                <div style="background:var(--orange-soft);border-radius:16px;padding:16px">
+                    <strong>有新客户时</strong>
+                    <p style="font-size:13px;color:var(--muted);margin-top:4px">
+                        1. 启动服务器: <code>python consultation_server.py</code><br>
+                        2. 客户填表自动保存<br>
+                        3. 或手动放 JSON 到「待处理」目录
+                    </p>
+                </div>
+                <div style="background:var(--green-soft);border-radius:16px;padding:16px">
+                    <strong>处理客户</strong>
+                    <p style="font-size:13px;color:var(--muted);margin-top:4px">
+                        一键全流程:<br>
+                        <code>python consultation_workflow.py full</code><br>
+                        自动生成报告 + 打包交付物
+                    </p>
+                </div>
+                <div style="background:var(--blue-soft);border-radius:16px;padding:16px">
+                    <strong>回复客户</strong>
+                    <p style="font-size:13px;color:var(--muted);margin-top:4px">
+                        话术助手:<br>
+                        <code>python reply_helper.py</code><br>
+                        选场景 → 自动复制到剪贴板
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterTable(status) {
+            const rows = document.querySelectorAll('#clientTable tbody tr');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            rows.forEach(row => {
+                if (status === 'all') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = row.classList.contains('status-' + status) ? '' : 'none';
+                }
+            });
+        }
+
+        function searchTable(keyword) {
+            const rows = document.querySelectorAll('#clientTable tbody tr');
+            const kw = keyword.toLowerCase();
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(kw) ? '' : 'none';
+            });
+        }
+
+        setInterval(() => {
+            if (!document.hidden) {
+                location.reload();
+            }
+        }, 8000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+      --bg: #fff7fb;
+      --paper: rgba(255, 255, 255, 0.82);
+      --ink: #4a3a46;
+      --muted: #8e7283;
+      --gold: #e6a6b9;
+      --line: #f1dbe4;
+      --accent: #c88fb1;
+      --accent-soft: #fff0f6;
+      --lavender: #f4efff;
+      --ink: #2f2a24;
+      --muted: #756a5f;
+      --gold: #b98a3b;
+      --line: #eadfce;
+    }
+      background:
+        radial-gradient(circle at top, rgba(230,166,185,.22), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 22%),
+        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top, rgba(185,138,59,.1), transparent 25%), var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 18px 45px rgba(200,143,177,.12);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
+      color: #fffafd;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(59,42,18,.96), rgba(130,94,42,.92));
+      color: #fff9ef;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.2);
+      font-size: 13px;
+    }
+    }
+    h1, h2 { margin: 0 0 12px; }
+    .desc { color: var(--muted); }
+    .hero .desc { color: rgba(255,255,255,.9); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+      border: 1px solid #ead7e2;
+      background: rgba(255,255,255,.9);
+      padding: 12px 14px;
+      color: var(--ink);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(200,143,177,.14);
+      transform: translateY(-1px);
+      border-radius: 14px;
+      border: 1px solid #d8ccb9;
+      background: #fff;
+      font: inherit;
+    }
+      border-radius: 16px;
+    .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .check-item:hover {
+      transform: translateY(-1px);
+      border-color: #e3b6ca;
+      box-shadow: 0 10px 24px rgba(200,143,177,.08);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+    .check-item label { display: flex; gap: 8px; align-items: center; margin: 0; font-weight: 500; }
+    .check-item input { width: auto; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    button {
+      border: 0;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .primary {
+      background: linear-gradient(135deg, #d989aa, #c88fb1);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(200,143,177,.25);
+      border-radius: 999px;
+    .secondary { background: rgba(255,255,255,.86); color: var(--ink); border: 1px solid var(--line); }
+      cursor: pointer;
+      background: linear-gradient(135deg, #5c4656, #7d5d71);
+      color: #fff6fb;
+    .secondary { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+    pre {
+      background: #2c241c;
+      color: #f8eddc;
+      border-radius: 18px;
+      padding: 18px;
+      overflow: auto;
+      background: var(--accent-soft);
+      border: 1px solid #f1cfe0;
+    }
+    .tip {
+      background: #fcf7ed;
+      border: 1px solid #f0dfbf;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .promise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; }
+    .promise {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .promise strong { display: block; margin-bottom: 4px; }
+    .card h2 {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h2::before {
+      content: "✿";
+      color: var(--accent);
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">🌷 温柔开运版 · 适合女生审美</div>
+      <h1>工位小改造 · 信息收集表</h1>
+      <p class="desc">希望整体更顺眼、更舒服、也更适合自己当下状态的话，可以把这里当成一份轻盈版工位问诊单。信息越完整，后面的建议会越贴合你。</p>
+      <div class="promise-grid">
+        <div class="promise"><strong>24小时交付</strong><div>标准版默认 24 小时内完成初稿。</div></div>
+        <div class="promise"><strong>低调可执行</strong><div>优先用不突兀、同事也能接受的桌面方案。</div></div>
+        <div class="promise"><strong>支持复盘追问</strong><div>摆完后还可根据反馈做微调建议。</div></div>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">好看但不夸张</span>
+        <span class="badge">办公桌也能轻松照搬</span>
+        <span class="badge">偏日常、偏耐看</span>
+      </div>
+      <div class="tip" style="margin-top:16px; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); color: #fff9ef;">
+        推荐使用流程：客户照片先放进 <strong>客户档案/照片</strong>，JSON 保存到 <strong>客户档案/待处理</strong>，生成完成后移到 <strong>客户档案/已完成</strong>。
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>基本信息</h2>
+      <div class="grid">
+        <div><label>昵称</label><input id="nickname" placeholder="例如：小鱼" /></div>
+        <div><label>咨询日期</label><input id="consult_date" type="date" /></div>
+        <div><label>服务档位</label><select id="service_tier"><option>基础版(49.9元)</option><option selected>标准版(99元)</option><option>高级版(199元)</option></select></div>
+        <div><label>职业/岗位</label><input id="job" placeholder="例如：产品经理" /></div>
+        <div><label>工位朝向</label><select id="orientation"><option>不确定</option><option>面朝东</option><option>面朝南</option><option>面朝西</option><option>面朝北</option></select></div>
+        <div><label>预算</label><select id="budget"><option>50元以内（极简方案）</option><option selected>50-150元（基础方案）</option><option>150-300元（标准方案）</option><option>300元以上（豪华方案）</option></select></div>
+      </div>
+      <div style="margin-top:14px"><label>当前最大困扰</label><textarea id="pain_points" placeholder="例如：最近工位很乱，背后总有人走，注意力很差。"></textarea></div>
+    </section>
+
+    <section class="card">
+      <h2>环境信息</h2>
+      <div class="grid">
+        <div><label>办公环境</label><select id="workspace_type"><option>独立办公室</option><option>半封闭卡位/隔间</option><option selected>完全开放式工位</option><option>在家远程办公</option><option>其他</option></select></div>
+        <div><label>背后环境</label><select id="back_env"><option>实体墙壁</option><option selected>走廊/过道</option><option>窗户</option><option>其他同事的背</option><option>开放空间</option><option>其他</option></select></div>
+        <div><label>正前方</label><select id="front_env"><option>开阔的空间</option><option selected>隔断板/屏风</option><option>墙壁</option><option>柱子</option><option>对面同事的脸</option><option>其他</option></select></div>
+        <div><label>佩戴手串意愿</label><select id="wearables"><option>有（什么材质：待补充）</option><option selected>没有，但感兴趣</option><option>没有，不打算戴</option></select></div>
+        <div><label>风格偏好</label><select id="style"><option selected>简约现代风（不想太明显是"风水"物品）</option><option>中式古典风（不介意传统风水摆件）</option><option>可爱少女风（喜欢好看的摆件）</option><option>无所谓，实用就行</option></select></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>核心诉求</h2>
+      <div class="checks" id="goalsBox"></div>
+    </section>
+
+    <section class="card">
+      <h2>特殊情况</h2>
+      <div class="checks" id="surroundingsBox"></div>
+    </section>
+
+    <section class="card">
+      <h2>现有物品</h2>
+      <div class="checks" id="itemsBox"></div>
+    </section>
+
+    <section class="card">
+      <h2>照片观察与路径</h2>
+      <div style="margin-bottom:14px"><label>照片观察</label><textarea id="photo_findings" placeholder="每行一条，例如：桌面左侧文件较多。&#10;背后就是过道。"></textarea></div>
+      <div style="margin-bottom:14px"><label>人工备注</label><textarea id="manual_notes" placeholder="例如：客户希望低调，不想太明显的玄学物品。"></textarea></div>
+      <div class="grid">
+        <div><label>正面照路径</label><input id="photo_front" placeholder="例如：照片/客户A_正面照.jpg" /></div>
+        <div><label>俯拍照路径</label><input id="photo_top" placeholder="例如：照片/客户A_俯拍照.jpg" /></div>
+        <div><label>背后照路径</label><input id="photo_back" placeholder="例如：照片/客户A_背后照.jpg" /></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>生成客户档案 JSON</h2>
+      <div class="btn-row">
+        <button class="primary" onclick="buildJson()">生成 JSON 草稿</button>
+        <button class="secondary" onclick="copyJson()">复制 JSON</button>
+        <button class="secondary" onclick="downloadJson()">下载 JSON 文件</button>
+      </div>
+      <div class="tip">生成后可直接下载到客户目录，例如：<strong>知识付费/咨询服务/客户档案/待处理/客户名.json</strong>。后续整批运行报告脚本时，直接传这个目录即可。</div>
+      <pre id="output">点击上方按钮后，这里会出现 JSON 草稿。</pre>
+    </section>
+  </div>
+
+  <script>
+    const goals = ["升职加薪", "招财进宝", "防小人", "改善人际关系", "提升专注力/效率", "减少焦虑/内耗", "身体健康"];
+    const surroundings = ["正对厕所门", "正对或靠近茶水间/餐厅", "头顶有横梁或管道", "空调/风扇直吹", "正对电梯口", "正对大门/入口", "旁边有垃圾桶", "被墙角/桌角/柱角对着"];
+    const items = ["显示器/笔记本电脑", "绿植/花", "水杯/保温杯", "台灯", "文件/文件架", "照片/摆件", "零食", "招财猫/风水物品"];
+
+    function renderChecks(targetId, options) {
+      const box = document.getElementById(targetId);
+      box.innerHTML = options.map((item, index) => `
+        <div class="check-item">
+          <label><input type="checkbox" value="${item}" data-group="${targetId}" id="${targetId}_${index}"> ${item}</label>
+        </div>
+      `).join('');
+    }
+
+    function getChecked(groupId) {
+      return Array.from(document.querySelectorAll(`input[data-group="${groupId}"]:checked`)).map(el => el.value);
+    }
+
+    function linesToArray(value) {
+      return value.split('\n').map(v => v.trim()).filter(Boolean);
+    }
+
+    function buildJson() {
+      const photoPaths = [];
+      if (document.getElementById('photo_front').value.trim()) photoPaths.push({ label: '正面照', path: document.getElementById('photo_front').value.trim() });
+      if (document.getElementById('photo_top').value.trim()) photoPaths.push({ label: '俯拍照', path: document.getElementById('photo_top').value.trim() });
+      if (document.getElementById('photo_back').value.trim()) photoPaths.push({ label: '背后照', path: document.getElementById('photo_back').value.trim() });
+
+      const payload = {
+        nickname: document.getElementById('nickname').value.trim(),
+        consult_date: document.getElementById('consult_date').value || new Date().toISOString().slice(0, 10),
+        service_tier: document.getElementById('service_tier').value,
+        job: document.getElementById('job').value.trim(),
+        goals: getChecked('goalsBox'),
+        pain_points: document.getElementById('pain_points').value.trim(),
+        workspace_type: document.getElementById('workspace_type').value,
+        orientation: document.getElementById('orientation').value,
+        back_env: document.getElementById('back_env').value,
+        front_env: document.getElementById('front_env').value,
+        surroundings: getChecked('surroundingsBox'),
+        existing_items: getChecked('itemsBox'),
+        wearables: document.getElementById('wearables').value,
+        budget: document.getElementById('budget').value,
+        style: document.getElementById('style').value,
+        photo_findings: linesToArray(document.getElementById('photo_findings').value),
+        photo_paths: photoPaths,
+        manual_notes: document.getElementById('manual_notes').value.trim()
+      };
+
+      document.getElementById('output').textContent = JSON.stringify(payload, null, 2);
+    }
+
+    async function copyJson() {
+      const text = document.getElementById('output').textContent;
+      if (!text || text.includes('点击上方按钮')) return;
+      await navigator.clipboard.writeText(text);
+      alert('JSON 已复制');
+    }
+
+    function downloadJson() {
+      const text = document.getElementById('output').textContent;
+      if (!text || text.includes('点击上方按钮')) return;
+
+      const nickname = document.getElementById('nickname').value.trim() || '客户';
+      const date = document.getElementById('consult_date').value || new Date().toISOString().slice(0, 10);
+      const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${nickname}_${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    renderChecks('goalsBox', goals);
+    renderChecks('surroundingsBox', surroundings);
+    renderChecks('itemsBox', items);
+    document.getElementById('consult_date').value = new Date().toISOString().slice(0, 10);
+  </script>
+</body>
+</html>

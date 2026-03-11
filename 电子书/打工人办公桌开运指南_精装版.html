@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《打工人办公桌开运指南》精装版</title>
+  <style>
+    :root {
+      --bg: #fff7fb;
+      --paper: rgba(255,255,255,0.84);
+      --ink: #4a3a46;
+      --muted: #8b7382;
+      --gold: #d98faf;
+      --gold-soft: #fdeaf2;
+      --line: #f1dbe4;
+      --accent: #c87da2;
+      --shadow: 0 22px 60px rgba(201, 129, 165, 0.14);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top, rgba(217,143,175,0.2), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,0.12), transparent 24%),
+        linear-gradient(180deg, #fff8fc 0%, var(--bg) 100%);
+      line-height: 1.85;
+    }
+    .shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+    .cover {
+      background: linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
+      color: #fffafd;
+      border-radius: 28px;
+      padding: 72px 56px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before,
+    .cover::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+    .cover::before { width: 260px; height: 260px; right: -80px; top: -60px; }
+    .cover::after { width: 180px; height: 180px; left: -60px; bottom: -70px; }
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 48px;
+      line-height: 1.2;
+      letter-spacing: .02em;
+    }
+    .subtitle {
+      margin: 18px 0 0;
+      font-size: 20px;
+      color: rgba(255,250,253,0.92);
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .meta span {
+      background: rgba(255,255,255,0.14);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+    .quote {
+      margin-top: 28px;
+      padding: 18px 20px;
+      border-left: 4px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.12);
+      border-radius: 12px;
+      color: rgba(255,250,253,0.94);
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 40px rgba(201, 129, 165, 0.1);
+      border-radius: 24px;
+      padding: 34px 30px;
+      margin-top: 24px;
+    }
+    .toc-grid, .chapter-grid, .two-col {
+      display: grid;
+      gap: 18px;
+    }
+    .toc-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .chapter-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .two-col { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .toc-item {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+      border-radius: 18px;
+      padding: 18px 18px 16px;
+      transition: .2s ease;
+    }
+    .toc-item:hover { transform: translateY(-2px); border-color: var(--gold); box-shadow: 0 14px 28px rgba(201,129,165,0.1); }
+    .toc-item strong { display: block; color: var(--accent); margin-bottom: 4px; }
+    h2 {
+      margin: 0 0 18px;
+      font-size: 30px;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+    h3 {
+      margin: 26px 0 12px;
+      font-size: 22px;
+      color: #5e4655;
+    }
+    h4 {
+      margin: 18px 0 8px;
+      font-size: 18px;
+      color: #6b5362;
+    }
+    p { margin: 10px 0; }
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 8px 0; }
+    .lead {
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: -4px;
+    }
+    .note, .tip, .warn {
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+    .note { background: #fff3f8; border: 1px solid #f4d7e5; }
+    .tip { background: #f8f4ff; border: 1px solid #e3daf7; }
+    .warn { background: #fff4f6; border: 1px solid #f2d1db; }
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: var(--gold-soft);
+      color: #9a5478;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      overflow: hidden;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 12px 10px;
+      vertical-align: top;
+      background: #fff;
+    }
+    th { background: #fff1f6; color: #9a5478; }
+    pre {
+      white-space: pre-wrap;
+      background: linear-gradient(135deg, #5c4656, #7d5d71);
+      color: #fff6fb;
+      border-radius: 18px;
+      padding: 18px;
+      overflow: auto;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .checklist li { list-style: none; position: relative; padding-left: 8px; }
+    .checklist li::before { content: "☐"; margin-right: 8px; color: var(--gold); }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 32px;
+      padding: 20px 0;
+    }
+    .print-btn {
+      position: sticky;
+      top: 16px;
+      float: right;
+      z-index: 2;
+      border: 0;
+      background: #fff;
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 12px 18px;
+      box-shadow: 0 10px 24px rgba(201,129,165,0.18);
+      cursor: pointer;
+    }
+    @media print {
+      body { background: #fff; }
+      .shell { max-width: none; padding: 0; }
+      .cover, .card { box-shadow: none; border: 1px solid #ddd; }
+      .print-btn { display: none; }
+      .card, .cover { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+    @media (max-width: 720px) {
+      .cover { padding: 42px 24px; }
+      h1 { font-size: 34px; }
+      h2 { font-size: 25px; }
+      .card { padding: 24px 18px; }
+      .print-btn { float: none; width: 100%; margin-bottom: 12px; position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <button class="print-btn" onclick="window.print()">导出 / 打印 PDF</button>
+
+    <section class="cover">
+      <div class="eyebrow">知识付费 · 温柔轻盈版电子书</div>
+      <h1>《打工人办公桌开运指南》</h1>
+      <p class="subtitle">从桌面的小调整开始，让工位更顺眼、状态更稳定，也让每天的办公氛围更舒服一点。</p>
+      <div class="meta">
+        <span>6 大章节</span>
+        <span>5 类职业方案</span>
+        <span>100-300 元可落地</span>
+        <span>适合办公室 / 家庭办公</span>
+      </div>
+      <div class="quote">你的桌面，不一定要夸张才算改变。很多时候，只是让它更干净、更有秩序、更贴合自己的状态，整个人的感觉就会慢慢不一样。</div>
+    </section>
+
+    <section class="card">
+      <h2>阅读说明</h2>
+      <p class="lead">这一版才是对外可交付样式。Markdown 文件更适合写内容，真正售卖、发客户、导出 PDF，建议使用这个 HTML 精装版。</p>
+      <div class="two-col">
+        <div class="note">
+          <strong>适合谁看</strong>
+          <ul>
+            <li>想优化办公桌、工位、家庭办公区的人</li>
+            <li>最近状态差、效率低、总感觉不顺的人</li>
+            <li>想用低预算做一次“可见改变”的人</li>
+          </ul>
+        </div>
+        <div class="tip">
+          <strong>怎么用最有效</strong>
+          <ol>
+            <li>先看第 1 章排雷</li>
+            <li>再按第 2 章重做布局</li>
+            <li>最后根据第 5 章选职业方案</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>目录</h2>
+      <div class="toc-grid">
+        <a class="toc-item" href="#chapter-1"><strong>第1章</strong>5个让你越来越不顺的工位大忌</a>
+        <a class="toc-item" href="#chapter-2"><strong>第2章</strong>办公桌九宫格布局法</a>
+        <a class="toc-item" href="#chapter-3"><strong>第3章</strong>6大开运神器完全指南</a>
+        <a class="toc-item" href="#chapter-4"><strong>第4章</strong>5种转运手串佩戴指南</a>
+        <a class="toc-item" href="#chapter-5"><strong>第5章</strong>5大职业定制布局方案</a>
+        <a class="toc-item" href="#chapter-6"><strong>第6章</strong>每月工位维护清单</a>
+        <a class="toc-item" href="#faq"><strong>附录</strong>常见问题解答</a>
+      </div>
+    </section>
+
+    <section class="card" id="chapter-1">
+      <h2>第1章：5个让你越来越不顺的工位大忌</h2>
+      <p class="lead">先排雷，再布局。很多人不是没有好运，而是工位一直在悄悄消耗状态。</p>
+      <div class="chapter-grid">
+        <div>
+          <h3>1. 桌面过乱</h3>
+          <p><span class="tag">表现</span>文件堆积、零食散落、线缆缠绕、杯子太多。</p>
+          <p><span class="tag">影响</span>视觉噪音高，注意力下降，领导印象分变差。</p>
+          <p><span class="tag">解法</span>桌面只留“正在用”的东西，下班前 3 分钟归位。</p>
+        </div>
+        <div>
+          <h3>2. 背后无靠</h3>
+          <p><span class="tag">表现</span>背后是走廊、开放空间、窗户。</p>
+          <p><span class="tag">影响</span>容易紧绷、难专注，也容易感觉没人撑你。</p>
+          <p><span class="tag">解法</span>优先靠墙；不行就高靠背椅 / 靠垫 / 椅背小葫芦。</p>
+        </div>
+        <div>
+          <h3>3. 正对厕所或茶水间</h3>
+          <p><span class="tag">表现</span>抬头就是厕所门、茶水区、人流口。</p>
+          <p><span class="tag">影响</span>噪音、气味、人流会持续打断专注力。</p>
+          <p><span class="tag">解法</span>铜葫芦口朝问题方向，高绿植做遮挡，必要时加淡香型香薰。</p>
+        </div>
+        <div>
+          <h3>4. 头顶压迫</h3>
+          <p><span class="tag">表现</span>横梁、管道、空调直吹。</p>
+          <p><span class="tag">影响</span>压迫感、易疲劳、易生病。</p>
+          <p><span class="tag">解法</span>换位最佳；否则用向上生长的植物 + 挡风板缓解。</p>
+        </div>
+        <div>
+          <h3>5. 屏幕脏乱</h3>
+          <p><span class="tag">表现</span>满屏指纹、灰尘、油污。</p>
+          <p><span class="tag">影响</span>眼睛疲劳、效率下降、心理上产生“前途模糊”的感觉。</p>
+          <p><span class="tag">解法</span>每周一次清洁湿巾擦屏，1 分钟见效。</p>
+        </div>
+      </div>
+      <div class="warn">
+        <strong>快速判断：</strong>如果你中了 3 条以上，先不要急着买摆件，先把问题位清掉，效果反而更快。
+      </div>
+    </section>
+
+    <section class="card" id="chapter-2">
+      <h2>第2章：办公桌九宫格布局法</h2>
+      <p class="lead">这是整本书最核心的方法。不会看朝向也没关系，先用“坐下后的左右前后”就够了。</p>
+      <pre>┌──────────────┬──────────────┬──────────────┐
+│    左后方      │    正后方      │    右后方      │
+│   靠山位        │   事业位        │   净化位        │
+│  放水晶/靠垫    │  放文昌塔       │  放盐灯        │
+├──────────────┼──────────────┼──────────────┤
+│    正左方      │    正中央      │    正右方      │
+│   财位          │   工作区        │   白虎位        │
+│  放招财猫/水晶  │  保持整洁       │  放虎皮兰       │
+├──────────────┼──────────────┼──────────────┤
+│    左前方      │    正前方      │    右前方      │
+│   生气位        │   明堂          │   文案位        │
+│  放绿植         │  保持空旷       │  放文竹        │
+└──────────────┴──────────────┴──────────────┘</pre>
+      <h3>4 条核心原则</h3>
+      <ol>
+        <li><strong>左高右低：</strong>左边宜高宜动，右边宜低宜静。</li>
+        <li><strong>前方空旷：</strong>正前方别堆文件，明堂要留白。</li>
+        <li><strong>后方有靠：</strong>靠墙最好，没有就补靠背与靠垫。</li>
+        <li><strong>中央清净：</strong>主战场只留电脑和当前工作物。</li>
+      </ol>
+      <div class="tip">
+        <strong>实操 4 步：</strong>清空桌面 → 擦桌面 → 按九宫格摆回去 → 拍照留存，之后就按这个标准维护。
+      </div>
+    </section>
+
+    <section class="card" id="chapter-3">
+      <h2>第3章：6大开运神器完全指南</h2>
+      <table>
+        <thead>
+          <tr><th>物品</th><th>主要作用</th><th>推荐位置</th><th>预算参考</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>招财猫</td><td>招正财、旺人缘</td><td>左手边青龙位</td><td>20-50 元</td></tr>
+          <tr><td>黄水晶</td><td>招财、增强决策感</td><td>左前方 / 显示器旁</td><td>30-200 元</td></tr>
+          <tr><td>貔貅</td><td>守财、招进不招出</td><td>偏左，头朝门或窗</td><td>30-120 元</td></tr>
+          <tr><td>文昌塔</td><td>旺事业、旺思维</td><td>正后方 / 左前方</td><td>40-130 元</td></tr>
+          <tr><td>盐灯</td><td>净化气场、缓焦虑</td><td>右后方角落</td><td>30-100 元</td></tr>
+          <tr><td>铜葫芦</td><td>化煞、缓冲问题位</td><td>有问题就对位摆放</td><td>20-60 元</td></tr>
+        </tbody>
+      </table>
+
+      <h3>选购和摆放要点</h3>
+      <div class="two-col">
+        <div>
+          <h4>招财猫</h4>
+          <ul>
+            <li>优先陶瓷、太阳能款。</li>
+            <li>面朝门口或走道，不要朝自己。</li>
+            <li>放左边，不放右边。</li>
+          </ul>
+          <h4>黄水晶</h4>
+          <ul>
+            <li>新手选原石，管理层选球，销售选簇。</li>
+            <li>每月清水冲洗，满月可晒月光。</li>
+          </ul>
+          <h4>貔貅</h4>
+          <ul>
+            <li>黄铜最稳，黑曜石适合压力大的人。</li>
+            <li>别让人乱摸，别正对镜子。</li>
+          </ul>
+        </div>
+        <div>
+          <h4>文昌塔</h4>
+          <ul>
+            <li>普通打工人用 7 层或 9 层足够。</li>
+            <li>下面可压职业目标纸条。</li>
+          </ul>
+          <h4>盐灯</h4>
+          <ul>
+            <li>办公桌买小号 USB 款即可。</li>
+            <li>别放潮湿位置。</li>
+          </ul>
+          <h4>铜葫芦</h4>
+          <ul>
+            <li>对厕所：口朝厕所。</li>
+            <li>背后走廊：挂椅背或桌后方。</li>
+            <li>空调直吹：摆在冲煞位置做缓冲。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="chapter-4">
+      <h2>第4章：5种转运手串佩戴指南</h2>
+      <p class="lead">手串是最适合移动工位、经常开会、经常出差的人使用的开运物。</p>
+      <div class="note"><strong>基本原则：</strong>左进右出。想招好运戴左手；想排负能量，黑曜石这类更适合右手。</div>
+      <table>
+        <thead>
+          <tr><th>手串</th><th>适合人群</th><th>作用</th><th>价格</th><th>佩戴建议</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>小叶紫檀</td><td>所有人</td><td>稳心神、稳气场</td><td>50-200 元</td><td>左手日常佩戴</td></tr>
+          <tr><td>黑曜石</td><td>关系复杂人群</td><td>防小人、排浊气</td><td>30-100 元</td><td>右手优先</td></tr>
+          <tr><td>南红玛瑙</td><td>销售 / 商务</td><td>旺人缘、提气场</td><td>100-400 元</td><td>左手</td></tr>
+          <tr><td>绿幽灵</td><td>想升职加薪</td><td>事业运、正财运</td><td>70-300 元</td><td>左手</td></tr>
+          <tr><td>月光石</td><td>易焦虑内耗</td><td>稳情绪、保灵感</td><td>50-200 元</td><td>左手</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="chapter-5">
+      <h2>第5章：5大职业定制布局方案</h2>
+      <div class="chapter-grid">
+        <div class="note">
+          <h3>程序员 / 技术岗</h3>
+          <ul>
+            <li>左边：绿幽灵</li>
+            <li>右边：虎皮兰</li>
+            <li>后方：文昌塔</li>
+            <li>旁边：USB 盐灯</li>
+            <li>手上：小叶紫檀</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>销售 / 商务岗</h3>
+          <ul>
+            <li>左边：招财猫</li>
+            <li>左前：铜钱草</li>
+            <li>后方：貔貅</li>
+            <li>右边：保持安静整洁</li>
+            <li>手上：南红玛瑙</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>设计师 / 创意岗</h3>
+          <ul>
+            <li>左边：黄水晶簇</li>
+            <li>左前：文竹</li>
+            <li>旁边：檀香线香 / 无火香薰</li>
+            <li>后方：月光石摆件</li>
+            <li>手上：月光石手串</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>财务 / 审计岗</h3>
+          <ul>
+            <li>左边：铜貔貅</li>
+            <li>右边：黑曜石摆件</li>
+            <li>后方：7 层文昌塔</li>
+            <li>左前：金钱树</li>
+            <li>手上：黑曜石右手佩戴</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>管理层 / 团队负责人</h3>
+          <ul>
+            <li>左边：黄水晶球</li>
+            <li>后方：9 层 / 13 层文昌塔</li>
+            <li>右边：大株虎皮兰</li>
+            <li>桌角：盐灯</li>
+            <li>手上：小叶紫檀长串</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="chapter-6">
+      <h2>第6章：每月工位维护清单</h2>
+      <div class="two-col">
+        <div>
+          <h3>每日</h3>
+          <ul class="checklist">
+            <li>下班前整理桌面</li>
+            <li>检查绿植和水杯</li>
+            <li>擦掉摆件表面的灰</li>
+          </ul>
+          <h3>每周</h3>
+          <ul class="checklist">
+            <li>擦屏幕</li>
+            <li>整理抽屉和文件</li>
+            <li>检查绿植是否有枯叶</li>
+          </ul>
+        </div>
+        <div>
+          <h3>每月</h3>
+          <ul class="checklist">
+            <li>水晶清水净化</li>
+            <li>铜摆件干布抛光</li>
+            <li>桌下和周边大扫除</li>
+            <li>检查位置是否偏移</li>
+          </ul>
+          <h3>紧急更换信号</h3>
+          <ul>
+            <li>绿植枯萎：立刻换</li>
+            <li>摆件破损：立刻换</li>
+            <li>盐灯潮湿融化：立刻移位</li>
+            <li>手串断裂：感恩后换新</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="faq">
+      <h2>附录：常见问题</h2>
+      <h3>Q1：我不信风水，有必要吗？</h3>
+      <p>有。即使抛开玄学，一个更整洁、更有秩序、更有审美和心理暗示的工作环境，本身就能提升效率和心情。</p>
+      <h3>Q2：同事会不会觉得奇怪？</h3>
+      <p>不会。优先用低调款：绿植、陶瓷摆件、盐灯、简约香薰，都会更像“高级桌面布置”。</p>
+      <h3>Q3：总预算多少合适？</h3>
+      <p>基础方案 100-200 元足够；想做得完整些，300-500 元也能封顶。</p>
+      <h3>Q4：经常换工位怎么办？</h3>
+      <p>优先使用可移动物：手串、小摆件、便携香薰。人到哪，开运物到哪。</p>
+      <h3>Q5：在家办公能不能用？</h3>
+      <p>完全可以，而且家里更自由，布局空间通常比公司更大。</p>
+      <div class="note">
+        <strong>写在最后：</strong>桌面风水不是万能解法，但它能让你在努力之外，多一层稳定心态、优化状态、增强行动感的辅助系统。
+      </div>
+    </section>
+
+    <div class="footer">
+      <p>© 2026 打工人桌面玄学 · 精装版电子书</p>
+      <p>建议直接打开此文件预览，或使用“打印 / 导出 PDF”生成交付版。</p>
+    </div>
+  </div>
+</body>
+</html>

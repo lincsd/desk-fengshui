@@ -1,0 +1,27 @@
+{
+  "nickname": "本地测试用户",
+  "consult_date": "2026-03-11",
+  "service_tier": "标准版(99元)",
+  "job": "产品经理",
+  "goals": [
+    "提升专注力/效率"
+  ],
+  "pain_points": "测试流程是否正常",
+  "workspace_type": "完全开放式工位",
+  "orientation": "面朝东",
+  "back_env": "实体墙壁",
+  "front_env": "开阔的空间",
+  "surroundings": [],
+  "existing_items": [
+    "显示器/笔记本电脑"
+  ],
+  "wearables": "没有，但感兴趣",
+  "budget": "50-150元（基础方案）",
+  "style": "简约现代风（不想太明显是\"风水\"物品）",
+  "photo_findings": [],
+  "photo_paths": [],
+  "manual_notes": "本地自动化测试",
+  "submission_status": "submitted",
+  "payment_status": "unpaid",
+  "submitted_at": "2026-03-11 21:13:35"
+}

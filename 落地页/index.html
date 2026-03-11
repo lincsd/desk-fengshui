@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打工人桌面玄学 · 服务中心</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #d98faf;
+            --gold-light: #fff0f6;
+            --dark: #5b4453;
+            --dark2: #7f5f72;
+            --text: #5a4654;
+            --text-dim: #8f7484;
+            --card-bg: rgba(255,255,255,0.72);
+            --card-border: rgba(217,143,175,0.22);
+            --bg-soft: #fff8fc;
+            --accent: #c981a5;
+            --shadow: rgba(201,129,165,0.14);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(217,143,175,0.18), transparent 26%),
+                radial-gradient(circle at right top, rgba(201,129,165,0.12), transparent 24%),
+                linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at center, rgba(217,143,175,0.16) 0%, transparent 72%);
+        }
+        .hero-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 16px rgba(201,129,165,0.18));
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(217,143,175,0.12);
+            border: 1px solid rgba(217,143,175,0.16);
+            color: var(--accent);
+            font-size: 0.9em;
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #c87da2, #e1a9c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .hero .subtitle {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .hero .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .stat-label { font-size: 0.9em; color: var(--text-dim); }
+
+        /* Section */
+        .section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+        .section-desc {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            font-size: 1.05em;
+        }
+
+        /* Service Cards */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 32px 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 18px 40px var(--shadow);
+        }
+        .service-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 44px rgba(201,129,165,0.18);
+        }
+        .service-card.featured {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(217,143,175,0.18), rgba(255,255,255,0.84));
+        }
+        .service-card.featured::before {
+            content: "🌸 女生最爱";
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: var(--gold);
+            color: #fff;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 4px 40px;
+            transform: rotate(45deg);
+        }
+        .card-icon { font-size: 40px; margin-bottom: 16px; }
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        .card-price {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .card-price span {
+            font-size: 0.5em;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+        .card-features {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        .card-features li {
+            padding: 6px 0;
+            font-size: 0.95em;
+            color: var(--text-dim);
+        }
+        .card-features li::before {
+            content: "✓ ";
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .card-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gold);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--gold);
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .card-btn:hover {
+            background: var(--gold);
+            color: #fff;
+        }
+        .card-btn.primary {
+            background: linear-gradient(135deg, var(--accent), #df9eb8);
+            color: #fff;
+            border-color: transparent;
+        }
+        .card-btn.primary:hover {
+            background: linear-gradient(135deg, #c7779d, #d98faf);
+        }
+
+        /* Process */
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .step {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            padding: 24px 16px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 14px 34px rgba(201,129,165,0.08);
+        }
+        .step-num {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d98faf, #c87da2);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin: 0 auto 12px;
+        }
+        .step-icon { font-size: 32px; margin-bottom: 8px; }
+        .step h4 { color: var(--dark); margin-bottom: 6px; }
+        .step p { font-size: 0.85em; color: var(--text-dim); }
+
+        /* Testimonials */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .testimonial {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 14px 34px rgba(201,129,165,0.08);
+        }
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d98faf, #efbfd2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .testimonial-name { font-weight: 600; color: var(--dark); }
+        .testimonial-role { font-size: 0.85em; color: var(--text-dim); }
+        .testimonial-text {
+            font-size: 0.95em;
+            color: var(--text-dim);
+            font-style: italic;
+            border-left: 3px solid var(--accent);
+            padding-left: 16px;
+        }
+        .stars { color: var(--gold); margin-top: 8px; }
+
+        /* FAQ */
+        .faq-list { max-width: 700px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid var(--card-border);
+            padding: 20px 0;
+        }
+        .faq-q {
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            font-size: 1.05em;
+        }
+        .faq-q::before { content: "Q: "; color: var(--gold); }
+        .faq-a {
+            margin-top: 10px;
+            color: var(--text-dim);
+            font-size: 0.95em;
+            padding-left: 24px;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, rgba(217,143,175,0.12) 0%, transparent 72%);
+        }
+        .cta h2 {
+            font-size: 2em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .cta p {
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto 30px;
+            font-size: 1.1em;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, var(--accent), #e0a7c0);
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 10px 24px rgba(201,129,165,0.22);
+        }
+        .cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 16px 32px rgba(201,129,165,0.26);
+        }
+        .cta-links {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .cta-link {
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(212,168,83,0.35);
+            padding-bottom: 2px;
+        }
+        .flow-tip {
+            margin-top: 14px;
+            color: var(--text-dim);
+            font-size: 0.92em;
+            text-align: center;
+        }
+        .mini-tip {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(217,143,175,0.12);
+            border: 1px solid rgba(217,143,175,0.18);
+            color: var(--accent);
+            font-size: 0.88em;
+        }
+        .hero-actions {
+            margin-top: 22px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.85em;
+            border-top: 1px solid var(--card-border);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8em; }
+            .hero .stats { gap: 24px; }
+            .section-title { font-size: 1.4em; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-icon">🏯</div>
+    <div class="hero-badge">🌷 温柔轻盈版 · 更适合女生审美</div>
+    <h1>打工人桌面玄学</h1>
+    <p class="subtitle">想让桌面更顺眼、更舒服，也更有一点属于自己的好运氛围。<br>这里给你的不是夸张摆件感，而是更轻盈、耐看、适合日常办公的开运思路。</p>
+    <div class="mini-tip" id="formModeTip">当前支持：填写资料后进入预约流程</div>
+    <div class="hero-actions">
+        <a class="card-btn primary consult-link" href="../咨询服务/客户信息收集表_网页版.html" style="max-width: 260px;">填写资料并预约</a>
+        <a class="card-btn" id="aiChatHeroLink" href="../咨询服务/ai_chat.html" style="max-width: 260px;">先和 AI 顾问聊聊</a>
+    </div>
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">工位诊断</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">98%</div>
+            <div class="stat-label">好评率</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">3000+</div>
+            <div class="stat-label">指南下载</div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="section">
+    <h2 class="section-title">📦 服务项目</h2>
+    <p class="section-desc">三种方案，满足不同需求。整体会优先推荐低调、好看、耐看的桌面风格。</p>
+
+    <div class="service-grid">
+        <!-- 电子书 -->
+        <div class="service-card">
+            <div class="card-icon">📖</div>
+            <div class="card-title">办公桌开运指南</div>
+            <div class="card-price">¥9.9 <span>/ 电子书</span></div>
+            <ul class="card-features">
+                <li>6章完整攻略（50+页）</li>
+                <li>九宫格布局法详解</li>
+                <li>6大开运神器指南</li>
+                <li>5大职业定制方案</li>
+                <li>每月维护清单</li>
+                <li>购买后免费获取更新</li>
+            </ul>
+            <a class="card-btn" id="ebookLinkCard" href="../电子书/打工人办公桌开运指南_精装版.html">立即获取</a>
+        </div>
+
+        <!-- 标准咨询 -->
+        <div class="service-card featured">
+            <div class="card-icon">🔮</div>
+            <div class="card-title">工位风水诊断</div>
+            <div class="card-price">¥99 <span>/ 次</span></div>
+            <ul class="card-features">
+                <li>1对1深度诊断</li>
+                <li>图文详细报告</li>
+                <li>定制九宫格布局图</li>
+                <li>物品购买清单+预算</li>
+                <li>1次免费追问</li>
+                <li>24小时内交付</li>
+            </ul>
+            <a class="card-btn primary consult-link" href="../咨询服务/客户信息收集表_网页版.html">填写资料并预约</a>
+        </div>
+
+        <!-- 高级咨询 -->
+        <div class="service-card">
+            <div class="card-icon">👑</div>
+            <div class="card-title">VIP 全程陪跑</div>
+            <div class="card-price">¥199 <span>/ 次</span></div>
+            <ul class="card-features">
+                <li>包含标准版所有内容</li>
+                <li>手绘精美布局图</li>
+                <li>30天无限答疑</li>
+                <li>布局后效果跟踪</li>
+                <li>赠送电子书一份</li>
+                <li>优先响应</li>
+            </ul>
+            <a class="card-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">填写资料并预约</a>
+        </div>
+    </div>
+    <p class="flow-tip">提交表单后，页面会自动引导到支付页面，完成预约后进入诊断安排。</p>
+</section>
+
+<!-- Process -->
+<section class="section">
+    <h2 class="section-title">🔄 服务流程</h2>
+    <p class="section-desc">简单 4 步，先提交资料，再完成预约，最后进入诊断安排</p>
+
+    <div class="process-steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-icon">📝</div>
+            <h4>填写资料</h4>
+            <p>先填写表单，提交你的岗位、诉求和工位情况</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-icon">💰</div>
+            <h4>完成预约</h4>
+            <p>提交后自动进入支付引导页，可选支付宝或微信</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-icon">📋</div>
+            <h4>进入诊断安排</h4>
+            <p>支付完成后进入专属安排页，等待整理你的方案</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-icon">🎉</div>
+            <h4>接收结果并执行</h4>
+            <p>收到诊断建议后按方案优化桌面布局</p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+    <h2 class="section-title">💬 用户反馈</h2>
+    <p class="section-desc">很多人不是想要“很玄”，而是想要“看起来舒服、用起来顺手、慢慢变顺”</p>
+
+    <div class="testimonial-grid">
+        <div class="testimonial">
+            <div class="testimonial-header">
+                <div class="avatar">👩‍💻</div>
+                <div>
+                    <div class="testimonial-name">小鱼</div>
+                    <div class="testimonial-role">互联网产品经理</div>
+                </div>
+            </div>
+            <p class="testimonial-text">"照着指南布局后第二周，压了三个月的需求突然被排期了，leader主动帮我争取到了资源。可能是巧合，但桌面确实变好看了，心情也好了。"</p>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-header">
+                <div class="avatar">👨‍💼</div>
+                <div>
+                    <div class="testimonial-name">阿杰</div>
+                    <div class="testimonial-role">销售主管</div>
+                </div>
+            </div>
+            <p class="testimonial-text">"做了工位诊断，发现我桌上全是犯忌的。调整之后一个月签了两个大单，团队业绩排名从第5到第2。199的VIP太值了！"</p>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-header">
+                <div class="avatar">👩‍🎨</div>
+                <div>
+                    <div class="testimonial-name">柚子</div>
+                    <div class="testimonial-role">UI设计师</div>
+                </div>
+            </div>
+            <p class="testimonial-text">"9.9的电子书买到就是赚到，干货含量超高。按照设计师专属方案摆了之后，灵感确实来得更快了，加班也少了很多～"</p>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+    <h2 class="section-title">❓ 常见问题</h2>
+    <div class="faq-list">
+        <div class="faq-item">
+            <div class="faq-q">我不信风水，买了有用吗？</div>
+            <p class="faq-a">整洁有序的桌面、绿植、暖光这些方法已被环境心理学证实能提升效率和心情。即使不谈风水，至少你会拥有一个赏心悦目的工位。信则灵，不信也不亏。</p>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">全套摆下来要花多少钱？</div>
+            <p class="faq-a">基础方案100-200元就够了（招财猫+绿植+盐灯+线香）。进阶方案300-500元封顶。所有推荐都标注了价格区间，丰俭由人。</p>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">在家办公也适用吗？</div>
+            <p class="faq-a">完全适用！九宫格布局法和所有开运物品在家里的办公桌同样有效。而且家里可以更自由地布置。</p>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">诊断报告多久能收到？</div>
+            <p class="faq-a">提交工位照片和问卷后，24小时内交付。VIP档位优先处理。</p>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">不满意可以退款吗？</div>
+            <p class="faq-a">电子书为虚拟商品不退款。咨询服务如果你按方案执行30天后完全没有任何改善的感觉，可以全额退款。</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+    <h2>准备把工位变得更顺眼一点了吗？</h2>
+    <p>从今天开始，把桌面慢慢调整成更适合自己的样子。<br>不需要很夸张，也可以悄悄变得更舒服、更有状态。</p>
+    <a class="cta-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">📱 填写资料 → 进入预约流程</a>
+    <div class="cta-links">
+        <a class="cta-link" id="aiChatFooterLink" href="../咨询服务/ai_chat.html">先问问 AI 顾问</a>
+        <a class="cta-link" id="queuePageLink" href="../咨询服务/购买后须知.html">查看诊断安排页</a>
+        <a class="cta-link" id="ebookLinkFooter" href="../电子书/打工人办公桌开运指南_精装版.html">先预览电子书</a>
+    </div>
+    <p class="flow-tip">流程：填写资料 → 支付引导页 → 诊断安排页 → 接收专属建议</p>
+    <p style="margin-top: 20px; font-size: 0.9em;">小红书搜索：<strong style="color: var(--gold);">打工人桌面玄学</strong></p>
+    <p style="margin-top: 8px; font-size: 0.9em; color: var(--text-dim);">电子书本地预览入口：<a href="../电子书/打工人办公桌开运指南_精装版.html" style="color: var(--gold); text-decoration: none;">打开精装版电子书</a></p>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2026 打工人桌面玄学 · 科学+玄学，双重加持你的职场运势</p>
+    <p style="margin-top: 8px;">本服务仅供参考，核心还是靠个人努力 💪</p>
+</footer>
+
+<script>
+    fetch('../public_links.json')
+        .then(resp => resp.ok ? resp.json() : Promise.reject(new Error('link config not found')))
+        .then(config => {
+            const consultUrl = config.consult_form_url || '../咨询服务/客户信息收集表_网页版.html';
+            const aiChatUrl = config.ai_chat_url || '../咨询服务/ai_chat.html';
+            const ebookUrl = config.ebook_url || '../电子书/打工人办公桌开运指南_精装版.html';
+            const queueUrl = config.queue_page_url || '../咨询服务/购买后须知.html';
+
+            document.querySelectorAll('.consult-link').forEach(link => {
+                link.href = consultUrl;
+                if (/^https?:\/\//.test(consultUrl)) {
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                }
+            });
+
+            document.getElementById('ebookLinkCard').href = ebookUrl;
+            document.getElementById('ebookLinkFooter').href = ebookUrl;
+            document.getElementById('queuePageLink').href = queueUrl;
+            document.getElementById('aiChatHeroLink').href = aiChatUrl;
+            document.getElementById('aiChatFooterLink').href = aiChatUrl;
+
+            if (/^https?:\/\//.test(consultUrl)) {
+                document.getElementById('formModeTip').textContent = '当前模式：第三方在线表单 → 支付引导页 → 诊断安排页';
+            }
+        })
+        .catch(() => {
+            // 保持默认相对链接
+        });
+</script>
+
+</body>
+</html>

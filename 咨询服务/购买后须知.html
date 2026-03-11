@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>诊断安排页 · 打工人桌面玄学</title>
+  <style>
+    :root {
+      --bg: #fff7fb;
+      --paper: rgba(255,255,255,.84);
+      --ink: #4a3a46;
+      --muted: #8e7283;
+      --gold: #df9eb8;
+      --line: #f1dbe4;
+      --accent: #c88fb1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(223,158,184,.22), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 24%),
+        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+    .page { max-width: 960px; margin: 0 auto; padding: 24px 18px 48px; }
+    .hero, .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 45px rgba(200,143,177,.12);
+      margin-bottom: 18px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
+      color: #fffafd;
+    }
+    h1, h2 { margin: 0 0 12px; }
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .step, .note {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
+    }
+    .step-num {
+      width: 34px; height: 34px; line-height: 34px; text-align: center;
+      border-radius: 50%; background: linear-gradient(135deg, #df9eb8, #c88fb1); color: #fff; font-weight: 700; margin-bottom: 10px;
+    }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    .btn {
+      display: inline-block; text-decoration: none; border-radius: 999px; padding: 12px 18px;
+      border: 1px solid var(--line); color: var(--ink); background: #fff;
+    }
+    .btn.primary { background: linear-gradient(135deg, #c88fb1, #df9eb8); color: #fff; border-color: transparent; }
+    ul { margin: 0; padding-left: 20px; }
+    .card h2::before {
+      content: "✿";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">🎀 温柔整理中 · 安排页</div>
+      <h1>诊断安排页</h1>
+      <p id="heroDesc">欢迎来到「打工人桌面玄学」。付款完成后按下面流程走，你会更快进入专属诊断安排，后续建议也会优先兼顾好看、耐看和日常可执行。</p>
+      <div class="cta-row" style="margin-bottom: 10px;">
+        <span class="btn" id="summaryName">客户：待确认</span>
+        <span class="btn" id="summaryTier">档位：待确认</span>
+        <span class="btn" id="summaryFile">编号：待确认</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn primary" href="客户信息收集表_网页版.html">立即填写咨询表</a>
+        <a class="btn" href="../电子书/打工人办公桌开运指南_精装版.html">查看电子书</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>交付流程</h2>
+      <div class="grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <strong>填写信息表</strong>
+          <p>先把岗位、诉求、工位环境、预算、审美偏好填完整。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <strong>提交工位照片</strong>
+          <p>建议最少 3 张：正面照、俯拍照、背后照。越真实越利于判断。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <strong>进入诊断队列</strong>
+          <p>资料和支付信息核对完成后，会进入你的专属整理队列，按顺序输出建议。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <strong>等待交付结果</strong>
+          <p>完成后会收到专属诊断结果与执行建议，再按方案逐步调整即可。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>你需要准备的内容</h2>
+      <div class="note">
+        <ul>
+          <li>你的岗位和最近最想改善的 1-3 个目标</li>
+          <li>工位朝向、背后环境、正前方环境</li>
+          <li>至少 3 张真实照片</li>
+          <li>预算范围：50 元以内 / 50-150 元 / 150-300 元 / 300 元以上</li>
+          <li>你更喜欢低调、古典还是可爱风格</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>常见提醒</h2>
+      <div class="note">
+        <ul>
+          <li>不需要特意收拾桌面，真实状态更容易看出问题。</li>
+          <li>如果不想太明显像“风水摆件”，可以选低调现代款方案。</li>
+          <li>电子书适合先自学，咨询服务适合直接拿到定制结果。</li>
+          <li>布局是辅助，执行力和持续整理习惯才是长期效果来源。</li>
+        </ul>
+      </div>
+      <div class="cta-row">
+        <a class="btn primary" href="客户信息收集表_网页版.html">去填写咨询表</a>
+        <a class="btn" href="../落地页/index.html">返回服务首页</a>
+      </div>
+    </section>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nickname = params.get('nickname') || '待确认';
+    const tier = params.get('tier') || '待确认';
+    const fileName = params.get('file') || '待确认';
+    document.getElementById('summaryName').textContent = '客户：' + nickname;
+    document.getElementById('summaryTier').textContent = '档位：' + tier;
+    document.getElementById('summaryFile').textContent = '编号：' + fileName;
+    document.getElementById('heroDesc').textContent = nickname + '，你的资料和预约信息已记录，接下来按下面流程等待进入专属诊断安排。';
+  </script>
+</body>
+</html>

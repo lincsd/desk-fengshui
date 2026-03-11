@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>专属诊断预约 · 支付引导</title>
+  <style>
+    :root {
+      --bg: #fff7fb;
+      --paper: rgba(255,255,255,.84);
+      --ink: #4a3a46;
+      --muted: #8e7283;
+      --gold: #df9eb8;
+      --line: #f1dbe4;
+      --deep: #b97d9d;
+      --soft: #fff0f6;
+      --ok: #cf7b9e;
+      --accent: #c88fb1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(223,158,184,.22), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 24%),
+        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+    .page { max-width: 1100px; margin: 0 auto; padding: 24px 18px 48px; }
+    .hero, .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 45px rgba(200,143,177,.12);
+      margin-bottom: 18px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
+      color: #fffafd;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    .hero .muted { color: rgba(255,255,255,.86); }
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .step, .panel, .pay-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fff;
+    }
+    .step-num {
+      width: 34px; height: 34px; line-height: 34px; text-align: center;
+      border-radius: 50%; background: linear-gradient(135deg, #df9eb8, #c88fb1); color: #fff; font-weight: 700; margin-bottom: 10px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px; padding: 8px 12px; margin-right: 8px; margin-top: 8px;
+    }
+    .pay-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .qr-box {
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      background: var(--soft);
+      border: 1px dashed #efcddd;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 18px; color: var(--muted);
+      overflow: hidden;
+    }
+    .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    .btn {
+      border: 1px solid var(--line); border-radius: 999px; padding: 12px 18px;
+      background: #fff; color: var(--ink); text-decoration: none; cursor: pointer; font: inherit;
+    }
+    .btn.primary { background: linear-gradient(135deg, var(--deep), #d999b8); color: #fff; border-color: transparent; }
+    .btn.success { background: linear-gradient(135deg, var(--ok), #e29db9); color: #fff; border-color: transparent; }
+    .code-box {
+      background: linear-gradient(135deg, #5c4656, #7d5d71); color: #fff6fb; border-radius: 18px; padding: 18px;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .tips { margin: 0; padding-left: 20px; }
+    .empty-pay-tip {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px dashed #efcddd;
+      color: var(--muted);
+    }
+    .card h2::before {
+      content: "✿";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">🩰 轻柔风格 · 预约页</div>
+      <h1>资料已提交成功</h1>
+      <p class="muted">接下来完成预约支付，就会进入你的专属诊断安排。整体会优先推荐低调、好看、日常也容易摆的方案，不会做太夸张的风格。</p>
+      <div>
+        <span class="pill">👤 <span id="nicknameText">你的专属档案</span></span>
+        <span class="pill">📋 <span id="tierText">标准诊断流程</span></span>
+        <span class="pill">🗂️ 编号：<span id="fileText">待生成</span></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>下一步怎么做</h2>
+      <div class="grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <strong>选择支付方式</strong>
+          <p>支持支付宝或微信。建议付款备注里带上你的昵称，方便快速核对。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <strong>保留支付截图</strong>
+          <p>如果没有自动备注成功，发截图也能快速对上你的资料。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <strong>进入诊断安排页</strong>
+          <p>支付完成后点击下方按钮，进入你的专属诊断安排页面，查看后续步骤。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="paySection">
+      <h2>选择支付方式</h2>
+      <div class="pay-grid">
+        <div class="pay-card" id="alipayCard">
+          <h3 id="alipayLabel">支付宝预约</h3>
+          <div class="qr-box" id="alipayQrBox">请在 payment_config.json 中配置支付宝收款码图片或跳转链接</div>
+          <div class="cta-row">
+            <a class="btn primary" id="alipayBtn" href="#" target="_blank" rel="noopener">打开支付宝入口</a>
+          </div>
+        </div>
+        <div class="pay-card" id="wechatCard">
+          <h3 id="wechatLabel">微信预约</h3>
+          <div class="qr-box" id="wechatQrBox">请在 payment_config.json 中配置微信收款码图片或跳转链接</div>
+          <div class="cta-row">
+            <a class="btn primary" id="wechatBtn" href="#" target="_blank" rel="noopener">打开微信入口</a>
+          </div>
+        </div>
+      </div>
+      <div class="empty-pay-tip" id="emptyPayTip">暂未配置可用的支付方式，请先在 payment_config.json 中填写收款码图片或支付链接。</div>
+    </section>
+
+    <section class="card">
+      <h2>给用户的付款提示</h2>
+      <div class="panel">
+        <p id="paymentNote">付款后请保留截图，并在备注里写上你的昵称，方便快速核对。</p>
+        <p class="muted">如需人工确认，可联系：<span id="contactLine">小红书：打工人桌面玄学</span></p>
+      </div>
+      <div class="cta-row">
+        <button class="btn" id="copyOrderBtn" type="button">复制预约信息</button>
+        <a class="btn success" id="queueBtn" href="购买后须知.html">我已完成支付，进入诊断安排页</a>
+      </div>
+      <div class="code-box" id="orderInfo"></div>
+    </section>
+
+    <section class="card">
+      <h2>建议文案</h2>
+      <ul class="tips">
+        <li>资料已收到，接下来完成预约登记后，将进入专属诊断流程。</li>
+        <li>诊断会结合你的工位朝向、职业诉求与照片单独整理，不是通用模板。</li>
+        <li>支付完成后点击“进入诊断安排页”，就能看到接下来的交付步骤。</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nickname = params.get('nickname') || '你的专属档案';
+    const tier = params.get('tier') || '标准版';
+    const fileName = params.get('file') || '待生成';
+    const queueUrl = params.get('queue_url') || '购买后须知.html';
+
+    document.getElementById('nicknameText').textContent = nickname;
+    document.getElementById('tierText').textContent = tier;
+    document.getElementById('fileText').textContent = fileName;
+    document.getElementById('queueBtn').href = queueUrl;
+
+    function checkImageExists(src) {
+      return new Promise(resolve => {
+        if (!src) {
+          resolve(false);
+          return;
+        }
+        const img = new Image();
+        img.onload = function() { resolve(true); };
+        img.onerror = function() { resolve(false); };
+        img.src = src;
+      });
+    }
+
+    function updatePaySectionVisibility() {
+      const cards = ['alipayCard', 'wechatCard']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+      const visibleCount = cards.filter(card => card.style.display !== 'none').length;
+      document.getElementById('emptyPayTip').style.display = visibleCount ? 'none' : 'block';
+    }
+
+    async function setPayCard(prefix, config) {
+      const card = document.getElementById(prefix + 'Card');
+      const label = document.getElementById(prefix + 'Label');
+      const qrBox = document.getElementById(prefix + 'QrBox');
+      const btn = document.getElementById(prefix + 'Btn');
+      const hasLink = Boolean(config.link);
+      const hasImage = await checkImageExists(config.qr_image);
+
+      if (!hasLink && !hasImage) {
+        card.style.display = 'none';
+        updatePaySectionVisibility();
+        return;
+      }
+
+      label.textContent = config.label || label.textContent;
+
+      if (hasImage) {
+        qrBox.innerHTML = '<img src="' + config.qr_image + '" alt="' + label.textContent + '收款码">';
+      } else {
+        qrBox.textContent = '当前未配置收款码图片，请使用下方按钮继续。';
+      }
+
+      if (hasLink) {
+        btn.href = config.link;
+      } else {
+        btn.removeAttribute('href');
+        btn.addEventListener('click', function(event) {
+          event.preventDefault();
+          alert('暂未配置跳转链接，请直接扫码支付。');
+        });
+      }
+    }
+
+    function buildOrderInfo(config) {
+      return [
+        '预约昵称：' + nickname,
+        '服务档位：' + tier,
+        '资料编号：' + fileName,
+        '联系入口：' + (config.contact_label || '小红书') + '：' + (config.contact_value || '打工人桌面玄学'),
+        '提示：' + (config.payment_note || '付款后请保留截图，并在备注里写上昵称。')
+      ].join('\n');
+    }
+
+    fetch('payment_config.json')
+      .then(resp => resp.ok ? resp.json() : Promise.reject(new Error('配置读取失败')))
+      .then(config => {
+        document.getElementById('paymentNote').textContent = config.payment_note || '付款后请保留截图，并在备注里写上你的昵称，方便快速核对。';
+        document.getElementById('contactLine').textContent = (config.contact_label || '小红书') + '：' + (config.contact_value || '打工人桌面玄学');
+        document.getElementById('orderInfo').textContent = buildOrderInfo(config);
+        Promise.all([
+          setPayCard('alipay', config.alipay || {}),
+          setPayCard('wechat', config.wechat || {})
+        ]).then(updatePaySectionVisibility);
+
+        document.getElementById('copyOrderBtn').addEventListener('click', async function() {
+          await navigator.clipboard.writeText(buildOrderInfo(config));
+          alert('预约信息已复制');
+        });
+      })
+      .catch(() => {
+        const fallback = {
+          contact_label: '小红书',
+          contact_value: '打工人桌面玄学',
+          payment_note: '付款后请保留截图，并在备注里写上你的昵称，方便快速核对。',
+          alipay: {},
+          wechat: {}
+        };
+        document.getElementById('orderInfo').textContent = buildOrderInfo(fallback);
+        document.getElementById('alipayCard').style.display = 'none';
+        document.getElementById('wechatCard').style.display = 'none';
+        updatePaySectionVisibility();
+        document.getElementById('copyOrderBtn').addEventListener('click', async function() {
+          await navigator.clipboard.writeText(buildOrderInfo(fallback));
+          alert('预约信息已复制');
+        });
+      });
+  </script>
+</body>
+</html>

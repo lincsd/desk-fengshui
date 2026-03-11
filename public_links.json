@@ -1,0 +1,10 @@
+{
+  "_说明": "公网链接配置。当前示例为腾讯问卷接入模板。",
+  "_用法": "把 consult_form_url 改成你的腾讯问卷公开链接；如果已部署公网页面，也可以一并改掉下面几个页面链接。",
+  "consult_form_url": "../咨询服务/客户信息收集表_网页版.html",
+  "ai_chat_url": "../咨询服务/ai_chat.html",
+  "ebook_url": "../电子书/打工人办公桌开运指南_精装版.html",
+  "queue_page_url": "../咨询服务/购买后须知.html",
+  "payment_guide_url": "../咨询服务/支付引导页.html",
+  "landing_page_url": "./index.html"
+}

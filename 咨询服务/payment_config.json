@@ -1,0 +1,15 @@
+{
+  "contact_label": "小红书",
+  "contact_value": "打工人桌面玄学",
+  "payment_note": "付款后请保留截图，并在备注里写上你的昵称，方便快速核对。",
+  "alipay": {
+    "label": "支付宝预约",
+    "link": "",
+    "qr_image": "payment_assets/alipay_qr.png"
+  },
+  "wechat": {
+    "label": "微信预约",
+    "link": "",
+    "qr_image": "payment_assets/wechat_qr.png"
+  }
+}

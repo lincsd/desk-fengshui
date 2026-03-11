@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>小鱼 · 工位风水诊断报告</title>
+    <style>
+        :root {
+            --bg: #f6f1e8;
+            --paper: #fffdf8;
+            --ink: #2f2a24;
+            --muted: #74695d;
+            --gold: #b98a3b;
+            --gold-soft: #f3e7cf;
+            --line: #eadfce;
+            --dark: #4a3517;
+            --shadow: 0 18px 50px rgba(79, 58, 20, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: radial-gradient(circle at top, rgba(185,138,59,.1), transparent 28%), var(--bg);
+            color: var(--ink);
+            line-height: 1.8;
+        }
+        .page { max-width: 1080px; margin: 0 auto; padding: 24px 18px 60px; }
+        .print-btn {
+            position: sticky; top: 16px; z-index: 3; float: right;
+            border: 0; background: #fff; color: var(--dark); border-radius: 999px;
+            padding: 12px 18px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,.08);
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(59,42,18,.96), rgba(130,94,42,.92));
+            color: #fff9ef; border-radius: 28px; padding: 42px 36px; box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        .hero::before, .hero::after {
+            content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.07);
+        }
+        .hero::before { width: 220px; height: 220px; right: -60px; top: -50px; }
+        .hero::after { width: 160px; height: 160px; left: -40px; bottom: -50px; }
+        .eyebrow { display: inline-block; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); font-size: 12px; letter-spacing: .08em; }
+        .hero h1 { margin: 16px 0 10px; font-size: 38px; line-height: 1.25; }
+        .hero p { margin: 10px 0; opacity: .92; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .hero-meta span { background: rgba(255,255,255,.1); padding: 8px 12px; border-radius: 999px; font-size: 13px; }
+        .card {
+            background: var(--paper); border: 1px solid var(--line); border-radius: 24px;
+            padding: 26px; margin-top: 20px; box-shadow: 0 8px 24px rgba(64,48,24,.04);
+        }
+        .section-title { margin: 0 0 16px; font-size: 26px; color: var(--dark); }
+        .lead { color: var(--muted); margin-top: -4px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .score-box, .info-box, .layout-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+        .score-box { background: #faf4e8; border-color: #ecdab8; }
+        .score-box span, .info-box span, .layout-card span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+        .score-box strong { font-size: 26px; color: #7d5a2b; }
+        .summary-box { background: #fcf7ed; border: 1px solid #f0dfbf; border-radius: 18px; padding: 18px; margin-top: 16px; }
+        .photo-list, .timeline-list { margin: 0; padding-left: 20px; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 16px; }
+        .photo-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+        .photo-card span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+        .photo-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; display: block; background: #f1ece3; }
+        .photo-card.missing .photo-placeholder {
+            height: 220px; border-radius: 12px; background: #f6efe5; color: var(--muted);
+            display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px;
+            border: 1px dashed #d8c7b0; font-size: 13px;
+        }
+        .issue-list, .layout-grid, .action-grid { display: grid; gap: 14px; }
+        .issue-list { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+        .layout-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+        .action-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .issue-card { background: #fff; border: 1px solid #efe2d0; border-radius: 18px; padding: 16px; }
+        .issue-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px; }
+        .issue-top h4 { margin: 0; font-size: 18px; color: var(--dark); }
+        .level { background: var(--gold-soft); color: #7c5a22; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
+        .action-block { border-radius: 18px; padding: 18px; border: 1px solid var(--line); background: #fff; }
+        .action-block h3 { margin: 0 0 12px; font-size: 18px; }
+        .action-block.urgent { background: #fff7f4; border-color: #f2d5cb; }
+        .action-block.suggest { background: #fffaf0; border-color: #f0e0b9; }
+        .action-block.bonus { background: #f7fbf5; border-color: #d9e9d1; }
+        .action-item { border-top: 1px dashed rgba(0,0,0,.08); padding-top: 12px; margin-top: 12px; }
+        .action-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+        table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 16px; }
+        th, td { border: 1px solid var(--line); padding: 12px 10px; text-align: left; vertical-align: top; }
+        th { background: #faf4e8; color: #65481d; }
+        .tip { background: #f5f8ef; border: 1px solid #dce8c7; border-radius: 16px; padding: 16px; margin-top: 16px; }
+        .footer-note { color: var(--muted); font-size: 14px; margin-top: 16px; }
+        @media print {
+            body { background: #fff; }
+            .page { max-width: none; padding: 0; }
+            .print-btn { display: none; }
+            .hero, .card { box-shadow: none; break-inside: avoid; }
+        }
+        @media (max-width: 720px) {
+            .print-btn { float: none; width: 100%; position: static; margin-bottom: 12px; }
+            .hero { padding: 30px 22px; }
+            .hero h1 { font-size: 30px; }
+            .card { padding: 20px; }
+            .section-title { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class='page'>
+        <button class='print-btn' onclick='window.print()'>导出 / 打印 PDF</button>
+
+        <section class='hero'>
+            <span class='eyebrow'>打工人桌面玄学 · 1对1定制诊断报告</span>
+            <h1>小鱼 · 工位风水诊断报告</h1>
+            <p>当前工位最核心的问题集中在：桌面杂乱、背后无靠、明堂受阻。综合来看，最需要优先提升的是“事业位”。本次方案会先处理干扰项，再补财位、事业位和整体磁场，让布局更贴合“互联网产品经理”的工作场景。</p>
+            <div class='hero-meta'>
+                <span>咨询日期：2026-03-11</span>
+                <span>服务档位：标准版(99元)</span>
+                <span>职业：互联网产品经理</span>
+                <span>核心诉求：升职加薪 / 提升专注力/效率 / 减少焦虑/内耗</span>
+            </div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>客户信息</h2>
+            <div class='info-grid'>
+                <div class='info-box'><span>工位朝向</span><strong>面朝西</strong></div>
+                <div class='info-box'><span>背后环境</span><strong>走廊/过道</strong></div>
+                <div class='info-box'><span>正前方</span><strong>隔断板/屏风</strong></div>
+                <div class='info-box'><span>预算</span><strong>50-150元（基础方案）</strong></div>
+                <div class='info-box'><span>风格偏好</span><strong>简约现代风（不想太明显是"风水"物品）</strong></div>
+                <div class='info-box'><span>特殊情况</span><strong>空调/风扇直吹、正对大门/入口、旁边有垃圾桶</strong></div>
+            </div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>综合评分</h2>
+            <div class='grid'><div class='score-box'><span>财运位</span><strong>6/10</strong></div><div class='score-box'><span>事业位</span><strong>3/10</strong></div><div class='score-box'><span>人缘位</span><strong>7/10</strong></div><div class='score-box'><span>健康位</span><strong>6/10</strong></div><div class='score-box'><span>整体磁场</span><strong>3/10</strong></div></div>
+            <div class='summary-box'>
+                <strong>综合得分：25/50</strong>
+                <p class='lead'>建议优先解决严重问题位，再做增强型布局，这样投入更省、反馈更快。</p>
+            </div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>照片观察与问题诊断</h2>
+            <p class='lead'>以下内容结合客户填写资料与照片初步判断生成。</p>
+            <ul class='photo-list'><li>桌面左侧和正前方都有文件堆积，明堂不够开阔。</li><li>背后就是过道，安全感偏弱。</li><li>整体缺少绿植和暖光源，看起来比较干冷。</li></ul>
+            <div class='photo-grid'><div class='photo-card missing'><span>正面照</span><div class='photo-placeholder'>未找到图片文件<br>D:\Users\Administrator\Desktop\ls\小红书带货\小红书带货\知识付费\咨询服务\客户档案\待处理\照片\小鱼_正面照.jpg</div></div><div class='photo-card missing'><span>俯拍照</span><div class='photo-placeholder'>未找到图片文件<br>D:\Users\Administrator\Desktop\ls\小红书带货\小红书带货\知识付费\咨询服务\客户档案\待处理\照片\小鱼_俯拍照.jpg</div></div><div class='photo-card missing'><span>背后照</span><div class='photo-placeholder'>未找到图片文件<br>D:\Users\Administrator\Desktop\ls\小红书带货\小红书带货\知识付费\咨询服务\客户档案\待处理\照片\小鱼_背后照.jpg</div></div></div>
+            <div class='issue-list' style='margin-top:16px'><div class='issue-card'><div class='issue-top'><h4>桌面杂乱</h4><span class='level'>严重</span></div><p><strong>位置：</strong>桌面整体</p><p><strong>解法：</strong>立刻清空无关物品，保留电脑、杯子、当前文件，增加收纳盒和理线夹。</p><p><strong>效果：</strong>3天内视觉压力下降，专注力明显回升。</p></div><div class='issue-card'><div class='issue-top'><h4>背后无靠</h4><span class='level'>严重</span></div><p><strong>位置：</strong>椅背后方</p><p><strong>解法：</strong>优先用高靠背椅/靠垫补靠山，必要时在椅背后挂小铜葫芦或放靠枕。</p><p><strong>效果：</strong>安全感增强，开会和专注工作时更稳。</p></div><div class='issue-card'><div class='issue-top'><h4>明堂受阻</h4><span class='level'>中等</span></div><p><strong>位置：</strong>工位正前方</p><p><strong>解法：</strong>清理正前方堆积，至少留出30cm空区，减少阻挡视线的高物。</p><p><strong>效果：</strong>前方压迫感下降，做事更顺手。</p></div><div class='issue-card'><div class='issue-top'><h4>空调直吹</h4><span class='level'>中等</span></div><p><strong>位置：</strong>头顶/正前方</p><p><strong>解法：</strong>调整座位角度或增加挡风板，桌面右后方补暖光盐灯稳定气场。</p><p><strong>效果：</strong>疲劳感和烦躁感降低。</p></div><div class='issue-card'><div class='issue-top'><h4>入口冲煞</h4><span class='level'>中等</span></div><p><strong>位置：</strong>大门/电梯口方向</p><p><strong>解法：</strong>在该方向增加缓冲物，如绿植、小摆件，避免气流直冲。</p><p><strong>效果：</strong>人来人往对专注力的影响减弱。</p></div></div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>九宫格布局方案</h2>
+            <p class='lead'>以下为当前工位最适合的落地摆放建议，优先按位置执行，不必一次买齐。</p>
+            <div class='layout-grid'><div class='layout-card'><span>左后方</span><strong>靠垫 + 小型补靠物</strong></div><div class='layout-card'><span>正后方</span><strong>极简金属书挡或低调文昌塔</strong></div><div class='layout-card'><span>右后方</span><strong>暖光小台灯/小盐灯</strong></div><div class='layout-card'><span>正左方</span><strong>黄水晶原石</strong></div><div class='layout-card'><span>正中央</span><strong>仅保留电脑与当前工作物</strong></div><div class='layout-card'><span>正右方</span><strong>保持低矮整洁，可放白盆虎皮兰</strong></div><div class='layout-card'><span>左前方</span><strong>文竹或白盆虎皮兰</strong></div><div class='layout-card'><span>正前方</span><strong>保持空旷，至少留出30cm</strong></div><div class='layout-card'><span>右前方</span><strong>小号铜葫芦（可半隐藏）</strong></div></div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>分阶段改善建议</h2>
+            <div class='action-grid'><div class='action-block urgent'><h3>🔴 紧急处理（本周内）</h3><div class='action-item'><strong>桌面杂乱</strong><p><b>解法：</b>立刻清空无关物品，保留电脑、杯子、当前文件，增加收纳盒和理线夹。</p><p><b>预计效果：</b>3天内视觉压力下降，专注力明显回升。</p></div><div class='action-item'><strong>背后无靠</strong><p><b>解法：</b>优先用高靠背椅/靠垫补靠山，必要时在椅背后挂小铜葫芦或放靠枕。</p><p><b>预计效果：</b>安全感增强，开会和专注工作时更稳。</p></div></div><div class='action-block suggest'><h3>🟡 建议优化（两周内）</h3><div class='action-item'><strong>明堂受阻</strong><p><b>解法：</b>清理正前方堆积，至少留出30cm空区，减少阻挡视线的高物。</p><p><b>预计效果：</b>前方压迫感下降，做事更顺手。</p></div><div class='action-item'><strong>空调直吹</strong><p><b>解法：</b>调整座位角度或增加挡风板，桌面右后方补暖光盐灯稳定气场。</p><p><b>预计效果：</b>疲劳感和烦躁感降低。</p></div></div><div class='action-block bonus'><h3>🟢 锦上添花（一个月内）</h3><div class='action-item'><strong>入口冲煞</strong><p><b>解法：</b>在该方向增加缓冲物，如绿植、小摆件，避免气流直冲。</p><p><b>预计效果：</b>人来人往对专注力的影响减弱。</p></div></div></div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>推荐物品清单</h2>
+            <table>
+                <thead><tr><th>物品</th><th>用途</th><th>摆放位置</th><th>价格</th></tr></thead>
+                <tbody><tr><td>黄水晶原石</td><td>提升财位和行动感</td><td>正左方</td><td>29-89元</td></tr><tr><td>极简金属书挡或低调文昌塔</td><td>增强事业位和思路稳定性</td><td>正后方</td><td>39-129元</td></tr><tr><td>文竹或白盆虎皮兰</td><td>增加生气，缓和视觉疲劳</td><td>左前方</td><td>15-39元</td></tr><tr><td>小号铜葫芦（可半隐藏）</td><td>缓冲冲煞、减少外部干扰</td><td>问题方向</td><td>19-49元</td></tr><tr><td>暖光小台灯/小盐灯</td><td>稳定气场、缓解焦躁</td><td>右后方</td><td>29-69元</td></tr><tr><td>无火香薰/淡香线香</td><td>建立专注仪式感</td><td>桌角</td><td>19-59元</td></tr></tbody>
+            </table>
+            <div class='tip'><strong>执行建议：</strong>先买“补问题位”的物品，再补“增强运势”的物品。这样最省预算，也最容易出效果。</div>
+        </section>
+
+        <section class='card'>
+            <h2 class='section-title'>维护与预期时间线</h2>
+            <div class='info-grid'>
+                <div class='info-box'><span>第1周</span><strong>桌面更清爽，精神压力下降</strong></div>
+                <div class='info-box'><span>第2-3周</span><strong>专注感提升，做事更顺手</strong></div>
+                <div class='info-box'><span>第1个月</span><strong>开始感受到环境正反馈</strong></div>
+                <div class='info-box'><span>第3个月</span><strong>形成稳定布局习惯</strong></div>
+            </div>
+            <div class='footer-note'>
+                本报告为定制化辅助建议，核心仍以个人执行力和工作能力为主。建议保留 1 次复盘追问，在实际摆放后根据反馈再做微调。<br>
+                出品品牌：打工人桌面玄学 ｜ 联系方式：小红书：打工人桌面玄学
+            </div>
+        </section>
+    </div>
+</body>
+</html>
