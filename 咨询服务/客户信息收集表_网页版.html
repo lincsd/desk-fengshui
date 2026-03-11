@@ -2,44 +2,55 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>填写资料并预约 · 打工人桌面玄学</title>
+  <style>
+    :root {
       --bg: #fff7fb;
-      --paper: rgba(255, 255, 255, 0.82);
+      --paper: rgba(255,255,255,.84);
       --ink: #4a3a46;
       --muted: #8e7283;
-      --gold: #e6a6b9;
       --line: #f1dbe4;
       --accent: #c88fb1;
+      --accent-deep: #b97898;
       --accent-soft: #fff0f6;
-      --lavender: #f4efff;
-      --ink: #2f2a24;
-      --muted: #756a5f;
-      --gold: #b98a3b;
-      --line: #eadfce;
+      --shadow: 0 18px 45px rgba(200,143,177,.12);
     }
-      background:
-        radial-gradient(circle at top, rgba(230,166,185,.22), transparent 28%),
-        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 22%),
-        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(circle at top, rgba(185,138,59,.1), transparent 25%), var(--bg);
+      background:
+        radial-gradient(circle at top, rgba(223,158,184,.22), transparent 28%),
+        radial-gradient(circle at right top, rgba(200,143,177,.12), transparent 24%),
+        linear-gradient(180deg, #fff8fc 0%, #fffdfd 100%);
       color: var(--ink);
-      line-height: 1.7;
+      line-height: 1.75;
     }
-      backdrop-filter: blur(14px);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 18px 45px rgba(200,143,177,.12);
+
+    .page {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px 18px 56px;
+    }
+
+    .hero, .card {
+      background: var(--paper);
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 26px;
       padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero {
       background: linear-gradient(135deg, #c98aa7 0%, #dfa6bf 48%, #e9bfd2 100%);
       color: #fffafd;
     }
-    .hero {
-      background: linear-gradient(135deg, rgba(59,42,18,.96), rgba(130,94,42,.92));
-      color: #fff9ef;
+
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -51,192 +62,471 @@
       font-size: 12px;
       margin-bottom: 14px;
     }
-    .hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-    .badge {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.2);
-      font-size: 13px;
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { margin-bottom: 12px; }
+
+    .hero p,
+    .hero .muted {
+      color: rgba(255,255,255,.9);
     }
+
+    .badge-row,
+    .btn-row,
+    .mini-steps,
+    .check-grid,
+    .meta-grid,
+    .main-grid,
+    .summary-grid {
+      display: grid;
+      gap: 14px;
     }
-    h1, h2 { margin: 0 0 12px; }
-    .desc { color: var(--muted); }
-    .hero .desc { color: rgba(255,255,255,.9); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-    label { display: block; font-weight: 600; margin-bottom: 6px; }
+
+    .badge-row {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 18px;
+    }
+
+    .hero-badge,
+    .mini-step,
+    .summary-block {
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.12);
+      padding: 16px;
+    }
+
+    .main-grid {
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, .95fr);
+      align-items: start;
+      gap: 18px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .meta-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .check-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .summary-grid,
+    .mini-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .card h2::before {
+      content: "✿";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
       border: 1px solid #ead7e2;
-      background: rgba(255,255,255,.9);
+      border-radius: 16px;
       padding: 12px 14px;
+      font: inherit;
       color: var(--ink);
+      background: rgba(255,255,255,.94);
       transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
     }
-    input:focus, textarea:focus, select:focus {
+
+    textarea {
+      min-height: 118px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 4px rgba(200,143,177,.14);
       transform: translateY(-1px);
-      border-radius: 14px;
-      border: 1px solid #d8ccb9;
-      background: #fff;
-      font: inherit;
     }
+
+    .hint,
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .check-item,
+    .choice-chip {
+      border: 1px solid var(--line);
       border-radius: 16px;
-    .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
       background: linear-gradient(180deg, #fff 0%, #fff8fb 100%);
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     }
-    .check-item:hover {
+
+    .check-item:hover,
+    .choice-chip:hover {
       transform: translateY(-1px);
       border-color: #e3b6ca;
       box-shadow: 0 10px 24px rgba(200,143,177,.08);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 10px 12px;
-      background: #fff;
     }
-    .check-item label { display: flex; gap: 8px; align-items: center; margin: 0; font-weight: 500; }
-    .check-item input { width: auto; }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-    button {
-      border: 0;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    button:hover { transform: translateY(-1px); }
-    .primary {
-      background: linear-gradient(135deg, #d989aa, #c88fb1);
-      color: #fff;
-      box-shadow: 0 10px 24px rgba(200,143,177,.25);
-      border-radius: 999px;
-    .secondary { background: rgba(255,255,255,.86); color: var(--ink); border: 1px solid var(--line); }
-      cursor: pointer;
-      background: linear-gradient(135deg, #5c4656, #7d5d71);
-      color: #fff6fb;
-    .secondary { background: #fff; color: var(--ink); border: 1px solid var(--line); }
-    pre {
-      background: #2c241c;
-      color: #f8eddc;
-      border-radius: 18px;
-      padding: 18px;
-      overflow: auto;
-      background: var(--accent-soft);
-      border: 1px solid #f1cfe0;
-    }
-    .tip {
-      background: #fcf7ed;
-      border: 1px solid #f0dfbf;
-      border-radius: 16px;
-      padding: 14px 16px;
-      margin-top: 14px;
-    }
-    .promise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; }
-    .promise {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 16px;
-      padding: 14px;
-    }
-    .promise strong { display: block; margin-bottom: 4px; }
-    .card h2 {
-      font-size: 20px;
+
+    .check-item label,
+    .choice-chip label {
       display: flex;
       align-items: center;
       gap: 8px;
+      margin: 0;
+      padding: 12px 14px;
+      font-weight: 500;
+      cursor: pointer;
     }
-    .card h2::before {
-      content: "✿";
-      color: var(--accent);
-      font-size: 16px;
+
+    .check-item input,
+    .choice-chip input {
+      width: auto;
+      margin: 0;
+    }
+
+    .choice-chip.active,
+    .check-item.active {
+      border-color: #d998b7;
+      background: linear-gradient(180deg, #fff7fb 0%, #fff 100%);
+      box-shadow: 0 12px 26px rgba(200,143,177,.1);
+    }
+
+    .sticky-panel {
+      position: sticky;
+      top: 18px;
+    }
+
+    .summary-block {
+      background: linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .summary-kv {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px dashed #efd7e2;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .summary-kv:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid #f1d0df;
+      font-size: 13px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button,
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    button:hover,
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-deep), #d999b8);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(200,143,177,.25);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .warn {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff4f7;
+      border: 1px solid #f1cfdd;
+      color: #a05d7c;
+      font-size: 14px;
+    }
+
+    .tip-box {
+      margin-top: 14px;
+      border-radius: 18px;
+      padding: 16px;
+      background: #fcf7ed;
+      border: 1px solid #f0dfbf;
+    }
+
+    .tip-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    @media (max-width: 920px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-panel {
+        position: static;
+      }
     }
   </style>
 </head>
 <body>
   <div class="page">
     <section class="hero">
-      <div class="eyebrow">🌷 温柔开运版 · 适合女生审美</div>
-      <h1>工位小改造 · 信息收集表</h1>
-      <p class="desc">希望整体更顺眼、更舒服、也更适合自己当下状态的话，可以把这里当成一份轻盈版工位问诊单。信息越完整，后面的建议会越贴合你。</p>
-      <div class="promise-grid">
-        <div class="promise"><strong>24小时交付</strong><div>标准版默认 24 小时内完成初稿。</div></div>
-        <div class="promise"><strong>低调可执行</strong><div>优先用不突兀、同事也能接受的桌面方案。</div></div>
-        <div class="promise"><strong>支持复盘追问</strong><div>摆完后还可根据反馈做微调建议。</div></div>
-      </div>
-      <div class="hero-badges">
-        <span class="badge">好看但不夸张</span>
-        <span class="badge">办公桌也能轻松照搬</span>
-        <span class="badge">偏日常、偏耐看</span>
-      </div>
-      <div class="tip" style="margin-top:16px; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); color: #fff9ef;">
-        推荐使用流程：客户照片先放进 <strong>客户档案/照片</strong>，JSON 保存到 <strong>客户档案/待处理</strong>，生成完成后移到 <strong>客户档案/已完成</strong>。
+      <div class="eyebrow">🩰 网页预约版 · 直接填写即可</div>
+      <h1>填写资料并预约</h1>
+      <p>这是一份面向客户的网页预约表。填完后会自动进入预约支付页，再进入诊断安排页。整体建议会优先照顾“低调、好看、日常可执行”，不走夸张路线。</p>
+      <div class="badge-row">
+        <div class="hero-badge"><strong>01 直接网页填写</strong><div>不用复制 JSON，也不用额外下载文件。</div></div>
+        <div class="hero-badge"><strong>02 自动进入预约流程</strong><div>提交后会直接跳到支付引导页。</div></div>
+        <div class="hero-badge"><strong>03 信息先留档</strong><div>当前浏览器会保存一份预约草稿，方便你回看。</div></div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>基本信息</h2>
-      <div class="grid">
-        <div><label>昵称</label><input id="nickname" placeholder="例如：小鱼" /></div>
-        <div><label>咨询日期</label><input id="consult_date" type="date" /></div>
-        <div><label>服务档位</label><select id="service_tier"><option>基础版(49.9元)</option><option selected>标准版(99元)</option><option>高级版(199元)</option></select></div>
-        <div><label>职业/岗位</label><input id="job" placeholder="例如：产品经理" /></div>
-        <div><label>工位朝向</label><select id="orientation"><option>不确定</option><option>面朝东</option><option>面朝南</option><option>面朝西</option><option>面朝北</option></select></div>
-        <div><label>预算</label><select id="budget"><option>50元以内（极简方案）</option><option selected>50-150元（基础方案）</option><option>150-300元（标准方案）</option><option>300元以上（豪华方案）</option></select></div>
+    <div class="main-grid">
+      <div class="stack">
+        <section class="card">
+          <h2>预约人信息</h2>
+          <div class="meta-grid">
+            <div>
+              <label for="nickname">你的昵称</label>
+              <input id="nickname" placeholder="例如：小鱼 / Coco" />
+            </div>
+            <div>
+              <label for="contact">联系方式</label>
+              <input id="contact" placeholder="例如：小红书号 / 微信号 / 手机号" />
+            </div>
+            <div>
+              <label for="consult_date">预约日期</label>
+              <input id="consult_date" type="date" />
+            </div>
+            <div>
+              <label for="service_tier">想预约的服务</label>
+              <select id="service_tier">
+                <option>轻咨询版</option>
+                <option selected>标准诊断版</option>
+                <option>深度定制版</option>
+              </select>
+            </div>
+            <div>
+              <label for="job">职业 / 岗位</label>
+              <input id="job" placeholder="例如：行政 / 运营 / 产品经理" />
+            </div>
+            <div>
+              <label for="budget">预算范围</label>
+              <select id="budget">
+                <option>50 元以内</option>
+                <option selected>50 - 150 元</option>
+                <option>150 - 300 元</option>
+                <option>300 元以上</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>工位大致情况</h2>
+          <div class="meta-grid">
+            <div>
+              <label for="workspace_type">办公环境</label>
+              <select id="workspace_type">
+                <option>独立办公室</option>
+                <option>半封闭卡位 / 隔间</option>
+                <option selected>开放式工位</option>
+                <option>在家办公</option>
+                <option>其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="orientation">工位朝向</label>
+              <select id="orientation">
+                <option selected>不确定</option>
+                <option>面朝东</option>
+                <option>面朝南</option>
+                <option>面朝西</option>
+                <option>面朝北</option>
+              </select>
+            </div>
+            <div>
+              <label for="back_env">背后环境</label>
+              <select id="back_env">
+                <option>实体墙壁</option>
+                <option selected>走廊 / 过道</option>
+                <option>窗户</option>
+                <option>同事背后区域</option>
+                <option>开放空间</option>
+                <option>其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="front_env">正前方</label>
+              <select id="front_env">
+                <option selected>隔断板 / 屏风</option>
+                <option>开阔空间</option>
+                <option>墙壁</option>
+                <option>柱子 / 桌角</option>
+                <option>对面同事</option>
+                <option>其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="style">希望的风格</label>
+              <select id="style">
+                <option selected>简约低调，不想太明显</option>
+                <option>偏温柔好看，适合办公拍照</option>
+                <option>偏中式传统，也能接受摆件</option>
+                <option>只要实用，风格无所谓</option>
+              </select>
+            </div>
+            <div>
+              <label for="wearables">手串 / 随身物接受度</label>
+              <select id="wearables">
+                <option>可以接受</option>
+                <option selected>先看看建议再决定</option>
+                <option>不考虑佩戴类物品</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>你最想改善什么</h2>
+          <div class="check-grid" id="goalsBox"></div>
+          <div class="hint">至少选 1 项，最多可多选。</div>
+        </section>
+
+        <section class="card">
+          <h2>有没有这些特殊情况</h2>
+          <div class="check-grid" id="surroundingsBox"></div>
+        </section>
+
+        <section class="card">
+          <h2>桌面上目前常见物品</h2>
+          <div class="check-grid" id="itemsBox"></div>
+        </section>
+
+        <section class="card">
+          <h2>补充描述</h2>
+          <div style="margin-bottom: 14px;">
+            <label for="pain_points">当前最困扰你的问题</label>
+            <textarea id="pain_points" placeholder="例如：最近工位很乱，背后总有人走，注意力很差，也不想摆太明显的东西。"></textarea>
+          </div>
+          <div style="margin-bottom: 14px;">
+            <label for="photo_findings">照片情况 / 工位说明</label>
+            <textarea id="photo_findings" placeholder="例如：桌面左侧文件较多；右手边有水杯和台灯；背后是过道。"></textarea>
+          </div>
+          <div>
+            <label for="manual_notes">其他备注</label>
+            <textarea id="manual_notes" placeholder="例如：希望整体更柔和一点，也适合平时拍照；不方便放太大的摆件。"></textarea>
+          </div>
+          <div class="tip-box">
+            <ul>
+              <li>当前网页版主要用于填写资料并预约。</li>
+              <li>如果需要照片，支付完成后可按安排页提示再补发给你。</li>
+              <li>信息越真实，后续建议越贴合你的工位状态。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>确认并进入预约</h2>
+          <div class="choice-chip" id="agreeWrap">
+            <label><input id="agree" type="checkbox" /> 我已确认填写的信息基本真实，并同意进入预约流程</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" type="button" id="submitBtn">填写完成，进入预约支付页</button>
+            <button class="btn-secondary" type="button" id="saveBtn">仅保存本地草稿</button>
+          </div>
+          <div class="warn" id="warnBox"></div>
+        </section>
       </div>
-      <div style="margin-top:14px"><label>当前最大困扰</label><textarea id="pain_points" placeholder="例如：最近工位很乱，背后总有人走，注意力很差。"></textarea></div>
-    </section>
 
-    <section class="card">
-      <h2>环境信息</h2>
-      <div class="grid">
-        <div><label>办公环境</label><select id="workspace_type"><option>独立办公室</option><option>半封闭卡位/隔间</option><option selected>完全开放式工位</option><option>在家远程办公</option><option>其他</option></select></div>
-        <div><label>背后环境</label><select id="back_env"><option>实体墙壁</option><option selected>走廊/过道</option><option>窗户</option><option>其他同事的背</option><option>开放空间</option><option>其他</option></select></div>
-        <div><label>正前方</label><select id="front_env"><option>开阔的空间</option><option selected>隔断板/屏风</option><option>墙壁</option><option>柱子</option><option>对面同事的脸</option><option>其他</option></select></div>
-        <div><label>佩戴手串意愿</label><select id="wearables"><option>有（什么材质：待补充）</option><option selected>没有，但感兴趣</option><option>没有，不打算戴</option></select></div>
-        <div><label>风格偏好</label><select id="style"><option selected>简约现代风（不想太明显是"风水"物品）</option><option>中式古典风（不介意传统风水摆件）</option><option>可爱少女风（喜欢好看的摆件）</option><option>无所谓，实用就行</option></select></div>
-      </div>
-    </section>
+      <aside class="sticky-panel">
+        <section class="card summary-grid">
+          <div class="summary-block">
+            <h3>当前预约摘要</h3>
+            <div class="summary-kv"><span>昵称</span><strong id="summaryNickname">未填写</strong></div>
+            <div class="summary-kv"><span>服务</span><strong id="summaryTier">标准诊断版</strong></div>
+            <div class="summary-kv"><span>岗位</span><strong id="summaryJob">待补充</strong></div>
+            <div class="summary-kv"><span>预算</span><strong id="summaryBudget">50 - 150 元</strong></div>
+            <div class="summary-kv"><span>风格</span><strong id="summaryStyle">简约低调</strong></div>
+            <div class="pill-row" id="summaryGoals"></div>
+          </div>
 
-    <section class="card">
-      <h2>核心诉求</h2>
-      <div class="checks" id="goalsBox"></div>
-    </section>
+          <div class="summary-block">
+            <h3>网页流程</h3>
+            <div class="mini-steps">
+              <div class="mini-step"><strong>1. 填资料</strong><div class="muted">先把你的工位情况和诉求写清楚。</div></div>
+              <div class="mini-step"><strong>2. 去预约</strong><div class="muted">提交后自动跳转到支付引导页。</div></div>
+              <div class="mini-step"><strong>3. 看安排</strong><div class="muted">付款后进入诊断安排页，等待后续交付。</div></div>
+            </div>
+          </div>
 
-    <section class="card">
-      <h2>特殊情况</h2>
-      <div class="checks" id="surroundingsBox"></div>
-    </section>
-
-    <section class="card">
-      <h2>现有物品</h2>
-      <div class="checks" id="itemsBox"></div>
-    </section>
-
-    <section class="card">
-      <h2>照片观察与路径</h2>
-      <div style="margin-bottom:14px"><label>照片观察</label><textarea id="photo_findings" placeholder="每行一条，例如：桌面左侧文件较多。&#10;背后就是过道。"></textarea></div>
-      <div style="margin-bottom:14px"><label>人工备注</label><textarea id="manual_notes" placeholder="例如：客户希望低调，不想太明显的玄学物品。"></textarea></div>
-      <div class="grid">
-        <div><label>正面照路径</label><input id="photo_front" placeholder="例如：照片/客户A_正面照.jpg" /></div>
-        <div><label>俯拍照路径</label><input id="photo_top" placeholder="例如：照片/客户A_俯拍照.jpg" /></div>
-        <div><label>背后照路径</label><input id="photo_back" placeholder="例如：照片/客户A_背后照.jpg" /></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>生成客户档案 JSON</h2>
-      <div class="btn-row">
-        <button class="primary" onclick="buildJson()">生成 JSON 草稿</button>
-        <button class="secondary" onclick="copyJson()">复制 JSON</button>
-        <button class="secondary" onclick="downloadJson()">下载 JSON 文件</button>
-      </div>
-      <div class="tip">生成后可直接下载到客户目录，例如：<strong>知识付费/咨询服务/客户档案/待处理/客户名.json</strong>。后续整批运行报告脚本时，直接传这个目录即可。</div>
-      <pre id="output">点击上方按钮后，这里会出现 JSON 草稿。</pre>
-    </section>
+          <div class="summary-block">
+            <h3>温柔提醒</h3>
+            <div class="muted">如果你不确定朝向、环境或物品名称，也可以先按直觉填写。先进入流程，比一次性填得特别完美更重要。</div>
+            <div class="btn-row">
+              <a class="btn btn-secondary" href="../电子书/打工人办公桌开运指南_精装版.html">先看电子书</a>
+              <a class="btn btn-secondary" href="../落地页/index.html">返回首页</a>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
   </div>
 
   <script>
-    const goals = ["升职加薪", "招财进宝", "防小人", "改善人际关系", "提升专注力/效率", "减少焦虑/内耗", "身体健康"];
-    const surroundings = ["正对厕所门", "正对或靠近茶水间/餐厅", "头顶有横梁或管道", "空调/风扇直吹", "正对电梯口", "正对大门/入口", "旁边有垃圾桶", "被墙角/桌角/柱角对着"];
-    const items = ["显示器/笔记本电脑", "绿植/花", "水杯/保温杯", "台灯", "文件/文件架", "照片/摆件", "零食", "招财猫/风水物品"];
+    const goals = ["升职加薪", "招财进宝", "防小人", "改善人际关系", "提升专注力", "减少焦虑内耗", "办公状态更稳定"];
+    const surroundings = ["正对厕所门", "靠近茶水间 / 餐区", "头顶有横梁或管道", "空调 / 风扇直吹", "正对电梯口", "正对大门 / 入口", "旁边有垃圾桶", "被墙角 / 桌角对着"];
+    const items = ["电脑 / 显示器", "绿植 / 花", "水杯 / 保温杯", "台灯", "文件 / 文件架", "照片 / 小摆件", "零食", "风水类摆件"];
+    const storageKey = 'desk_fengshui_booking_draft';
 
     function renderChecks(targetId, options) {
       const box = document.getElementById(targetId);
@@ -245,74 +535,193 @@
           <label><input type="checkbox" value="${item}" data-group="${targetId}" id="${targetId}_${index}"> ${item}</label>
         </div>
       `).join('');
+
+      box.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.addEventListener('change', function() {
+          input.closest('.check-item').classList.toggle('active', input.checked);
+          updateSummary();
+        });
+      });
     }
 
     function getChecked(groupId) {
       return Array.from(document.querySelectorAll(`input[data-group="${groupId}"]:checked`)).map(el => el.value);
     }
 
-    function linesToArray(value) {
-      return value.split('\n').map(v => v.trim()).filter(Boolean);
-    }
-
-    function buildJson() {
-      const photoPaths = [];
-      if (document.getElementById('photo_front').value.trim()) photoPaths.push({ label: '正面照', path: document.getElementById('photo_front').value.trim() });
-      if (document.getElementById('photo_top').value.trim()) photoPaths.push({ label: '俯拍照', path: document.getElementById('photo_top').value.trim() });
-      if (document.getElementById('photo_back').value.trim()) photoPaths.push({ label: '背后照', path: document.getElementById('photo_back').value.trim() });
-
-      const payload = {
+    function collectFormData() {
+      return {
         nickname: document.getElementById('nickname').value.trim(),
-        consult_date: document.getElementById('consult_date').value || new Date().toISOString().slice(0, 10),
+        contact: document.getElementById('contact').value.trim(),
+        consult_date: document.getElementById('consult_date').value,
         service_tier: document.getElementById('service_tier').value,
         job: document.getElementById('job').value.trim(),
-        goals: getChecked('goalsBox'),
-        pain_points: document.getElementById('pain_points').value.trim(),
+        budget: document.getElementById('budget').value,
         workspace_type: document.getElementById('workspace_type').value,
         orientation: document.getElementById('orientation').value,
         back_env: document.getElementById('back_env').value,
         front_env: document.getElementById('front_env').value,
+        style: document.getElementById('style').value,
+        wearables: document.getElementById('wearables').value,
+        goals: getChecked('goalsBox'),
         surroundings: getChecked('surroundingsBox'),
         existing_items: getChecked('itemsBox'),
-        wearables: document.getElementById('wearables').value,
-        budget: document.getElementById('budget').value,
-        style: document.getElementById('style').value,
-        photo_findings: linesToArray(document.getElementById('photo_findings').value),
-        photo_paths: photoPaths,
+        pain_points: document.getElementById('pain_points').value.trim(),
+        photo_findings: document.getElementById('photo_findings').value.trim(),
         manual_notes: document.getElementById('manual_notes').value.trim()
       };
-
-      document.getElementById('output').textContent = JSON.stringify(payload, null, 2);
     }
 
-    async function copyJson() {
-      const text = document.getElementById('output').textContent;
-      if (!text || text.includes('点击上方按钮')) return;
-      await navigator.clipboard.writeText(text);
-      alert('JSON 已复制');
+    function saveDraft(showMessage) {
+      const payload = collectFormData();
+      localStorage.setItem(storageKey, JSON.stringify(payload));
+      if (showMessage) {
+        showWarn('资料已保存在当前浏览器，下次打开这个页面还能继续填写。', false);
+      }
     }
 
-    function downloadJson() {
-      const text = document.getElementById('output').textContent;
-      if (!text || text.includes('点击上方按钮')) return;
+    function fillForm(data) {
+      if (!data) return;
 
-      const nickname = document.getElementById('nickname').value.trim() || '客户';
-      const date = document.getElementById('consult_date').value || new Date().toISOString().slice(0, 10);
-      const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${nickname}_${date}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const fieldIds = [
+        'nickname', 'contact', 'consult_date', 'service_tier', 'job', 'budget',
+        'workspace_type', 'orientation', 'back_env', 'front_env', 'style', 'wearables',
+        'pain_points', 'photo_findings', 'manual_notes'
+      ];
+
+      fieldIds.forEach(id => {
+        if (typeof data[id] === 'string') {
+          const el = document.getElementById(id);
+          if (el) el.value = data[id];
+        }
+      });
+
+      const groupMap = {
+        goalsBox: Array.isArray(data.goals) ? data.goals : [],
+        surroundingsBox: Array.isArray(data.surroundings) ? data.surroundings : [],
+        itemsBox: Array.isArray(data.existing_items) ? data.existing_items : []
+      };
+
+      Object.entries(groupMap).forEach(([groupId, values]) => {
+        document.querySelectorAll(`input[data-group="${groupId}"]`).forEach(input => {
+          input.checked = values.includes(input.value);
+          input.closest('.check-item').classList.toggle('active', input.checked);
+        });
+      });
+    }
+
+    function updateSummary() {
+      const data = collectFormData();
+      document.getElementById('summaryNickname').textContent = data.nickname || '未填写';
+      document.getElementById('summaryTier').textContent = data.service_tier || '未选择';
+      document.getElementById('summaryJob').textContent = data.job || '待补充';
+      document.getElementById('summaryBudget').textContent = data.budget || '待补充';
+      document.getElementById('summaryStyle').textContent = data.style ? data.style.replace('，', ' / ') : '待补充';
+
+      const goalsWrap = document.getElementById('summaryGoals');
+      const goalList = data.goals.length ? data.goals : ['还未选择目标'];
+      goalsWrap.innerHTML = goalList.map(item => `<span class="pill">${item}</span>`).join('');
+    }
+
+    function showWarn(message, isError) {
+      const box = document.getElementById('warnBox');
+      box.style.display = 'block';
+      box.style.background = isError ? '#fff4f7' : '#f6fbf7';
+      box.style.borderColor = isError ? '#f1cfdd' : '#d3ead8';
+      box.style.color = isError ? '#a05d7c' : '#4f7f5e';
+      box.textContent = message;
+    }
+
+    function hideWarn() {
+      const box = document.getElementById('warnBox');
+      box.style.display = 'none';
+      box.textContent = '';
+    }
+
+    function buildBookingId() {
+      const now = new Date();
+      const stamp = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, '0'),
+        String(now.getDate()).padStart(2, '0'),
+        String(now.getHours()).padStart(2, '0'),
+        String(now.getMinutes()).padStart(2, '0')
+      ].join('');
+      const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+      return 'BOOK-' + stamp + '-' + random;
+    }
+
+    function validate(data) {
+      if (!data.nickname) return '请先填写昵称。';
+      if (!data.contact) return '请先填写联系方式。';
+      if (!data.job) return '请先填写职业或岗位。';
+      if (!data.pain_points) return '请简单描述一下当前最困扰你的问题。';
+      if (!data.goals.length) return '请至少勾选 1 个想改善的目标。';
+      if (!document.getElementById('agree').checked) return '请先勾选“我已确认填写的信息基本真实”。';
+      return '';
+    }
+
+    function submitForm() {
+      hideWarn();
+      const data = collectFormData();
+      const error = validate(data);
+      if (error) {
+        showWarn(error, true);
+        return;
+      }
+
+      const bookingId = buildBookingId();
+      const payload = {
+        ...data,
+        booking_id: bookingId,
+        created_at: new Date().toISOString()
+      };
+      localStorage.setItem(storageKey, JSON.stringify(payload));
+
+      const queueUrl = new URL('购买后须知.html', window.location.href);
+      queueUrl.searchParams.set('nickname', data.nickname);
+      queueUrl.searchParams.set('tier', data.service_tier);
+      queueUrl.searchParams.set('file', bookingId);
+
+      const paymentUrl = new URL('支付引导页.html', window.location.href);
+      paymentUrl.searchParams.set('nickname', data.nickname);
+      paymentUrl.searchParams.set('tier', data.service_tier);
+      paymentUrl.searchParams.set('file', bookingId);
+      paymentUrl.searchParams.set('queue_url', queueUrl.toString());
+
+      window.location.href = paymentUrl.toString();
     }
 
     renderChecks('goalsBox', goals);
     renderChecks('surroundingsBox', surroundings);
     renderChecks('itemsBox', items);
+
     document.getElementById('consult_date').value = new Date().toISOString().slice(0, 10);
+
+    const draft = localStorage.getItem(storageKey);
+    if (draft) {
+      try {
+        fillForm(JSON.parse(draft));
+      } catch (error) {
+        localStorage.removeItem(storageKey);
+      }
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input', updateSummary);
+      el.addEventListener('change', function() {
+        if (el.id === 'agree') {
+          document.getElementById('agreeWrap').classList.toggle('active', el.checked);
+        }
+        updateSummary();
+      });
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      saveDraft(true);
+    });
+    document.getElementById('submitBtn').addEventListener('click', submitForm);
+
+    updateSummary();
   </script>
 </body>
 </html>
