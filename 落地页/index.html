@@ -384,7 +384,6 @@
     <div class="hero-badge">🌷 温柔轻盈版 · 更适合女生审美</div>
     <h1>打工人桌面玄学</h1>
     <p class="subtitle">想让桌面更顺眼、更舒服，也更有一点属于自己的好运氛围。<br>这里给你的不是夸张摆件感，而是更轻盈、耐看、适合日常办公的开运思路。</p>
-    <div class="mini-tip" id="formModeTip">当前支持：填写资料后进入预约流程</div>
     <div class="hero-actions">
         <a class="card-btn primary consult-link" href="../咨询服务/客户信息收集表_网页版.html" style="max-width: 260px;">填写资料并预约</a>
         <a class="card-btn" id="aiChatHeroLink" href="../咨询服务/ai_chat.html" style="max-width: 260px;">先和 AI 顾问聊聊</a>
@@ -568,15 +567,12 @@
 <section class="cta" id="contact">
     <h2>准备把工位变得更顺眼一点了吗？</h2>
     <p>从今天开始，把桌面慢慢调整成更适合自己的样子。<br>不需要很夸张，也可以悄悄变得更舒服、更有状态。</p>
-    <a class="cta-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">📱 填写资料 → 进入预约流程</a>
+    <a class="cta-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">📱 立即填写资料并预约</a>
     <div class="cta-links">
         <a class="cta-link" id="aiChatFooterLink" href="../咨询服务/ai_chat.html">先问问 AI 顾问</a>
-        <a class="cta-link" id="queuePageLink" href="../咨询服务/购买后须知.html">查看诊断安排页</a>
-        <a class="cta-link" id="ebookLinkFooter" href="../电子书/打工人办公桌开运指南_精装版.html">先预览电子书</a>
+        <a class="cta-link" id="ebookLinkFooter" href="../电子书/打工人办公桌开运指南_精装版.html">先看看电子书</a>
     </div>
-    <p class="flow-tip">流程：填写资料 → 支付引导页 → 诊断安排页 → 接收专属建议</p>
     <p style="margin-top: 20px; font-size: 0.9em;">小红书搜索：<strong style="color: var(--gold);">打工人桌面玄学</strong></p>
-    <p style="margin-top: 8px; font-size: 0.9em; color: var(--text-dim);">电子书本地预览入口：<a href="../电子书/打工人办公桌开运指南_精装版.html" style="color: var(--gold); text-decoration: none;">打开精装版电子书</a></p>
 </section>
 
 <!-- Footer -->
@@ -604,13 +600,10 @@
 
             document.getElementById('ebookLinkCard').href = ebookUrl;
             document.getElementById('ebookLinkFooter').href = ebookUrl;
-            document.getElementById('queuePageLink').href = queueUrl;
             document.getElementById('aiChatHeroLink').href = aiChatUrl;
             document.getElementById('aiChatFooterLink').href = aiChatUrl;
 
-            if (/^https?:\/\//.test(consultUrl)) {
-                document.getElementById('formModeTip').textContent = '当前模式：第三方在线表单 → 支付引导页 → 诊断安排页';
-            }
+
         })
         .catch(() => {
             // 保持默认相对链接
