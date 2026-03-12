@@ -322,6 +322,94 @@ class ConsultationHandler(SimpleHTTPRequestHandler):
             self._handle_photo_upload()
             return
 
+        if self.path == "/api/confirm-payment":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            try:
+                import random as _random
+                req = json.loads(body.decode("utf-8"))
+                file_name = req.get("file", "")
+                file_path = None
+                for search_dir in [PENDING_DIR, DONE_DIR]:
+                    candidate = search_dir / file_name
+                    if candidate.exists():
+                        file_path = candidate
+                        break
+                if not file_path:
+                    raise ValueError(f"找不到订单文件: {file_name}")
+                order = json.loads(file_path.read_text(encoding="utf-8"))
+                # Reuse existing code or generate a new 6-digit code
+                if order.get("verify_code"):
+                    code = order["verify_code"]
+                else:
+                    code = str(_random.randint(100000, 999999))
+                order["verify_code"] = code
+                order["payment_confirmed"] = True
+                order["payment_confirmed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                order["payment_status"] = "paid"
+                file_path.write_text(json.dumps(order, ensure_ascii=False, indent=2), encoding="utf-8")
+                refresh_dashboard()
+                result = {
+                    "success": True,
+                    "code": code,
+                    "nickname": order.get("nickname", ""),
+                    "tier": order.get("service_tier", ""),
+                }
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(json.dumps(result, ensure_ascii=False).encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}, ensure_ascii=False).encode("utf-8"))
+            return
+
+        if self.path == "/api/verify-code":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            try:
+                req = json.loads(body.decode("utf-8"))
+                input_code = str(req.get("code", "")).strip()
+                found = None
+                for search_dir in [PENDING_DIR, DONE_DIR]:
+                    if not search_dir.exists():
+                        continue
+                    for json_file in search_dir.glob("*.json"):
+                        try:
+                            order = json.loads(json_file.read_text(encoding="utf-8"))
+                            if (str(order.get("verify_code", "")) == input_code
+                                    and order.get("payment_confirmed")):
+                                found = order
+                                break
+                        except Exception:
+                            continue
+                    if found:
+                        break
+                if found:
+                    result = {
+                        "success": True,
+                        "nickname": found.get("nickname", ""),
+                        "tier": found.get("service_tier", ""),
+                    }
+                else:
+                    result = {"success": False, "error": "验证码错误，请检查后重试"}
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(json.dumps(result, ensure_ascii=False).encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "message": str(e)}, ensure_ascii=False).encode("utf-8"))
+            return
+
         self.send_response(404)
         self.end_headers()
 

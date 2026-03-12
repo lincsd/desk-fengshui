@@ -127,8 +127,18 @@ def _client_row(client: dict, status: str, reports: set, delivered: set) -> str:
             except Exception:
                 pass
 
+    verify_code = client.get("verify_code", "")
+    payment_confirmed = client.get("payment_confirmed", False)
+    file_name = client.get("_file", "")
+
     if password:
         pwd_html = f"<span class='pwd-cell'><code class='pwd-code'>{password}</code><button class='pwd-copy' onclick=\"navigator.clipboard.writeText('{password}');this.textContent='✅';setTimeout(()=>this.textContent='⎘',1200)\">⎘</button></span>"
+    elif verify_code:
+        safe_code = verify_code.replace("'", "\\'")
+        pwd_html = f"<span class='pwd-cell'><code class='verify-code' title='客户付款验证码'>{verify_code}</code><button class='pwd-copy' onclick=\"navigator.clipboard.writeText('{safe_code}');this.textContent='✅';setTimeout(()=>this.textContent='⎘',1200)\" title='复制验证码'>⎘</button></span><div style='font-size:11px;color:var(--green);margin-top:2px'>✅ 已确认收款</div>"
+    elif status == "pending" and file_name:
+        safe_file = file_name.replace("'", "\\'")
+        pwd_html = f"<button class='confirm-btn' onclick=\"confirmPayment('{safe_file}', this)\">💰 确认收款</button>"
     else:
         pwd_html = "<span style='color:var(--muted);font-size:12px'>-</span>"
 
@@ -356,6 +366,21 @@ def generate_dashboard(clients: dict) -> str:
         .pwd-copy {{ border:none; background:none; cursor:pointer; font-size:16px;
                      color:var(--muted); padding:2px 4px; border-radius:6px; }}
         .pwd-copy:hover {{ background:var(--gold-soft); }}
+        .confirm-btn {{
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }}
+        .confirm-btn:hover {{ filter: brightness(.92); }}
+        .verify-code {{ background:var(--green-soft); color:var(--green); padding:3px 10px;
+                     border-radius:8px; font-size:15px; font-weight:700; letter-spacing:3px;
+                     font-family:'Courier New',monospace; user-select:all; }}
         .auto-refresh-tip {{
             margin-top: 10px;
             color: rgba(255,249,239,.82);
@@ -535,6 +560,32 @@ def generate_dashboard(clients: dict) -> str:
                 location.reload();
             }}
         }}, 8000);
+
+        async function confirmPayment(file, btn) {{
+            btn.disabled = true;
+            btn.textContent = '处理中...';
+            try {{
+                const resp = await fetch('/api/confirm-payment', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ file }})
+                }});
+                const data = await resp.json();
+                if (data.success) {{
+                    const td = btn.closest('td');
+                    const code = data.code;
+                    td.innerHTML = '<span class="pwd-cell"><code class="verify-code">' + code + '</code><button class="pwd-copy" onclick="navigator.clipboard.writeText(\'' + code + '\');this.textContent=\'✅\';setTimeout(()=>this.textContent=\'⎘\',1200)">⎘</button></span><div style="font-size:11px;color:var(--green);margin-top:2px">✅ 已确认 · 验证码发给客户</div>';
+                }} else {{
+                    alert('操作失败: ' + (data.message || '未知错误'));
+                    btn.disabled = false;
+                    btn.textContent = '💰 确认收款';
+                }}
+            }} catch (e) {{
+                alert('网络错误: ' + e.message);
+                btn.disabled = false;
+                btn.textContent = '💰 确认收款';
+            }}
+        }}
     </script>
 </body>
 </html>"""

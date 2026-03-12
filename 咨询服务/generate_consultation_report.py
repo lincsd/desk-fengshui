@@ -15,10 +15,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT_DIR = ROOT / "输出报告"
@@ -118,6 +120,111 @@ STYLE_ITEMS = {
     },
 }
 
+
+# ─── AI Enrichment ──────────────────────────────────────────────────────────
+
+def _get_gemini_client():
+    """获取 GeminiClient，自动查找 utils/ 路径。"""
+    _search = [ROOT.parent.parent, ROOT.parent]
+    _utils_root = next((d for d in _search if (d / "utils").exists()), None)
+    if _utils_root and str(_utils_root) not in sys.path:
+        sys.path.insert(0, str(_utils_root))
+    from utils import GeminiClient
+    return GeminiClient()
+
+
+def ai_enrich(
+    data: Dict,
+    issue_names: List[str],
+    scores: Dict[str, int],
+    layout: Dict[str, str],
+    items: List[Dict[str, str]],
+) -> Optional[Dict]:
+    """
+    调用 Gemini，让 AI 对模板内容进行个性化增写。
+    返回包含以下 key 的字典（失败时返回 None，调用方 fallback 到模板）：
+      - summary        : 个性化诊断总结（1-2 段）
+      - issue_insights : {问题名: 针对该客户的额外分析句（1 句）}
+      - advice_opening : 改善建议首段（1 段，温柔引导语气）
+      - closing_note   : 结尾彩蛋/鼓励语（1-2 句，带情绪温度）
+    """
+    try:
+        client = _get_gemini_client()
+    except Exception as e:
+        print(f"⚠️ AI 增强跳过（无法初始化 Gemini 客户端）: {e}")
+        return None
+
+    nickname = data.get("nickname", "客户")
+    job = data.get("job", "")
+    goals = " / ".join(data.get("goals", []))
+    style = data.get("style", "")
+    back_env = data.get("back_env", "")
+    front_env = data.get("front_env", "")
+    budget = data.get("budget", "")
+    pain = data.get("pain_points", "") or data.get("manual_notes", "")
+    issues_text = "\n".join(f"- {name}（{ISSUE_LIBRARY.get(name, {}).get('severity', '')}）" for name in issue_names)
+    scores_text = "\n".join(f"- {k}: {v}/10" for k, v in scores.items())
+    items_text = "\n".join(f"- {item['物品']}（{item['用途']}，放{item['摆放位置']}）" for item in items)
+
+    prompt = f"""你是「打工人桌面玄学」的专属 AI 诊断顾问，有10年工位风水调整经验，语气温柔、专业、有亲和力，不过度神秘化，擅长用现代视角解读传统风水。
+
+以下是一位客户的工位诊断数据，请基于这些信息，用**第一人称（以"我""你"称呼客户）**输出4段个性化内容。
+
+【客户基本信息】
+- 昵称：{nickname}
+- 职业：{job}
+- 核心诉求：{goals}
+- 风格偏好：{style}
+- 背后环境：{back_env}
+- 正前方：{front_env}
+- 预算区间：{budget}
+- 客户自述痛点：{pain or "未填写"}
+
+【规则引擎识别出的问题】
+{issues_text if issues_text else "- 暂无明显问题"}
+
+【综合评分】
+{scores_text}
+
+【推荐物品方案】
+{items_text}
+
+---
+
+请严格按照以下 JSON 格式输出，**不要加任何额外说明**，只输出合法 JSON：
+
+{{
+  "summary": "（2-3句。针对{nickname}这位{job}，从她/他的诉求和环境出发，讲当前工位最核心的状态，语气像私人顾问在耐心解读，不要堆砌术语）",
+  "issue_insights": {{
+    问题名1: "（1句。针对{nickname}的职业和诉求，说明这个问题对她/他影响的具体场景，比「定义」更有温度）",
+    问题名2: "（同上）"
+  }},
+  "advice_opening": "（1-2句。在正式给建议前的过渡语，告诉客户我们的调整逻辑是什么，鼓励她/他不要焦虑，语气像朋友在说话）",
+  "closing_note": "（1-2句。根据客户诉求写一句温暖收尾。可以是鼓励，也可以是一个微小但有仪式感的建议）"
+}}"""
+
+    try:
+        raw = client.generate_text(prompt)
+        # 提取 JSON 块
+        start = raw.find("{")
+        end = raw.rfind("}") + 1
+        if start == -1 or end == 0:
+            print(f"⚠️ AI 增强：未找到 JSON，跳过增强")
+            return None
+        result = json.loads(raw[start:end])
+        # 验证必要字段
+        required = {"summary", "issue_insights", "advice_opening", "closing_note"}
+        if not required.issubset(result.keys()):
+            print(f"⚠️ AI 增强：响应缺少字段，跳过增强")
+            return None
+        print(f"✅ AI 增强成功（{nickname}）")
+        return result
+    except Exception as e:
+        print(f"⚠️ AI 增强失败（{e}），使用模板内容")
+        return None
+
+
+# ─── Core Logic ─────────────────────────────────────────────────────────────
 
 def load_profile(path: Path) -> Dict:
     with path.open("r", encoding="utf-8") as f:
@@ -353,7 +460,7 @@ def money_total(items: List[Dict[str, str]]) -> str:
     return f"约 {low}-{high} 元"
 
 
-def render_markdown(data: Dict, issue_names: List[str], scores: Dict[str, int], layout: Dict[str, str], items: List[Dict[str, str]], actions: Dict[str, List[Dict[str, str]]], summary: str) -> str:
+def render_markdown(data: Dict, issue_names: List[str], scores: Dict[str, int], layout: Dict[str, str], items: List[Dict[str, str]], actions: Dict[str, List[Dict[str, str]]], summary: str, ai_result: Optional[Dict] = None) -> str:
     today = data.get("consult_date") or datetime.now().strftime("%Y-%m-%d")
     nickname = data.get("nickname", "客户")
     goals = " / ".join(data.get("goals", [])) or "待补充"
@@ -373,13 +480,21 @@ def render_markdown(data: Dict, issue_names: List[str], scores: Dict[str, int], 
         if not data_list:
             lines.append("1. **建议**：当前阶段无需新增操作，保持即可。")
             return "\n".join(lines)
+        issue_insights = (ai_result or {}).get("issue_insights", {})
         for index, item in enumerate(data_list, start=start_num):
+            insight = issue_insights.get(item["name"], "")
+            insight_line = f"\n   - **AI 洞察**：{insight}" if insight else ""
             lines.append(
                 f"\n{index}. **问题**：{item['name']}\n"
                 f"   - **解法**：{item['solution']}\n"
                 f"   - **预计效果**：{item['effect']}"
+                f"{insight_line}"
             )
         return "\n".join(lines)
+
+    advice_opening = (ai_result or {}).get("advice_opening", "")
+    closing_note = (ai_result or {}).get("closing_note", "")
+    ai_badge = " 🤖 AI 增强版" if ai_result else ""
 
     return f"""# 🏢 工位风水诊断报告
 
@@ -463,7 +578,7 @@ def render_markdown(data: Dict, issue_names: List[str], scores: Dict[str, int], 
 
 ## 四、改善建议（按优先级排序）
 
-{render_action_block('🔴 紧急处理（本周内）', actions['urgent'], 1)}
+{advice_opening + chr(10) + chr(10) if advice_opening else ''}{render_action_block('🔴 紧急处理（本周内）', actions['urgent'], 1)}
 
 {render_action_block('🟡 建议优化（两周内）', actions['suggest'], 3)}
 
@@ -501,7 +616,7 @@ def render_markdown(data: Dict, issue_names: List[str], scores: Dict[str, int], 
 
 ---
 
-> 📝 本报告由「{BRAND_NAME}」自动生成初稿，可在看完照片后继续人工微调。
+{('> 💬 ' + closing_note + chr(10)) if closing_note else ''}> 📝 本报告由「{BRAND_NAME}」{ai_badge}自动生成，可在看完照片后继续人工微调。
 > 📬 标准版/高级版建议保留 1 次复盘追问机会。
 > ☎️ 联系方式：{BRAND_CONTACT}
 > ⚠️ 风水布局为辅助参考，核心仍是执行力与个人努力。
@@ -520,19 +635,27 @@ def render_html(
         layout: Dict[str, str],
         items: List[Dict[str, str]],
         actions: Dict[str, List[Dict[str, str]]],
-    photo_assets: List[Dict[str, str]],
+        photo_assets: List[Dict[str, str]],
         summary: str,
+        ai_result: Optional[Dict] = None,
 ) -> str:
         nickname = data.get("nickname", "客户")
         today = data.get("consult_date") or datetime.now().strftime("%Y-%m-%d")
         goals = " / ".join(data.get("goals", [])) or "待补充"
         photo_notes = data.get("photo_findings", []) or ["根据客户照片补充具体问题描述"]
 
+        ai_insights = (ai_result or {}).get("issue_insights", {})
+        ai_advice_opening = (ai_result or {}).get("advice_opening", "")
+        ai_closing = (ai_result or {}).get("closing_note", "")
+        ai_badge_html = "<span style='background:#e8f5e8;color:#2d6a2e;padding:3px 10px;border-radius:999px;font-size:12px;margin-left:10px;'>🤖 AI 增强版</span>" if ai_result else ""
+
         issue_cards = []
         for name in issue_names:
                 item = ISSUE_LIBRARY[name]
+                insight = ai_insights.get(name, "")
+                insight_html = f"<p class='ai-insight'>💡 {insight}</p>" if insight else ""
                 issue_cards.append(
-                        f"<div class='issue-card'><div class='issue-top'><h4>{name}</h4><span class='level'>{item['severity']}</span></div><p><strong>位置：</strong>{item['position']}</p><p><strong>解法：</strong>{item['solution']}</p><p><strong>效果：</strong>{item['effect']}</p></div>"
+                        f"<div class='issue-card'><div class='issue-top'><h4>{name}</h4><span class='level'>{item['severity']}</span></div><p><strong>位置：</strong>{item['position']}</p><p><strong>解法：</strong>{item['solution']}</p><p><strong>效果：</strong>{item['effect']}</p>{insight_html}</div>"
                 )
 
         item_rows = "".join(
@@ -573,6 +696,15 @@ def render_html(
                         for item in data_list
                 )
                 return f"<div class='action-block {class_name}'><h3>{title}</h3>{inner}</div>"
+
+        advice_opening_html = (
+            f"<div class='ai-intro-block'><p>{ai_advice_opening}</p></div>"
+            if ai_advice_opening else ""
+        )
+        closing_html = (
+            f"<div class='ai-closing'><p>✨ {ai_closing}</p></div>"
+            if ai_closing else ""
+        )
 
         total_score = sum(scores.values())
         action_html = "".join(
@@ -673,6 +805,9 @@ def render_html(
         th {{ background: #faf4e8; color: #65481d; }}
         .tip {{ background: #f5f8ef; border: 1px solid #dce8c7; border-radius: 16px; padding: 16px; margin-top: 16px; }}
         .footer-note {{ color: var(--muted); font-size: 14px; margin-top: 16px; }}
+        .ai-insight {{ background: #f0f7eb; border-left: 3px solid #7ec86e; padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: 13px; color: #3a6030; margin-top: 8px; }}
+        .ai-intro-block {{ background: #f5f8ef; border: 1px dashed #c5dcb5; border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; color: #3a5030; font-size: 14px; line-height: 1.8; }}
+        .ai-closing {{ background: linear-gradient(135deg, #f9f5ef, #f3eed8); border: 1px solid #e8d9b8; border-radius: 16px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #5a4020; line-height: 1.8; }}
         @media print {{
             body {{ background: #fff; }}
             .page {{ max-width: none; padding: 0; }}
@@ -694,7 +829,7 @@ def render_html(
 
         <section class='hero'>
             <span class='eyebrow'>{BRAND_NAME} · 1对1定制诊断报告</span>
-            <h1>{nickname} · 工位风水诊断报告</h1>
+            <h1>{nickname} · 工位风水诊断报告{ai_badge_html}</h1>
             <p>{summary}</p>
             <div class='hero-meta'>
                 <span>咨询日期：{today}</span>
@@ -741,6 +876,7 @@ def render_html(
 
         <section class='card'>
             <h2 class='section-title'>分阶段改善建议</h2>
+            {advice_opening_html}
             <div class='action-grid'>{action_html}</div>
         </section>
 
@@ -765,6 +901,7 @@ def render_html(
                 本报告为定制化辅助建议，核心仍以个人执行力和工作能力为主。建议保留 1 次复盘追问，在实际摆放后根据反馈再做微调。<br>
                 出品品牌：{BRAND_NAME} ｜ 联系方式：{BRAND_CONTACT}
             </div>
+            {closing_html}
         </section>
     </div>
 </body>
@@ -787,11 +924,24 @@ def process_profile(profile_path: Path) -> None:
 
     photo_assets = prepare_photo_assets(data, profile_path, target_dir)
 
+    # ── AI 增强（失败时 ai_result=None，自动降级到模板）──────────────────────
+    print(f"🤖 正在调用 AI 增强报告内容（{nickname}）...")
+    ai_result = ai_enrich(data, issue_names, scores, layout, items)
+    if ai_result:
+        # AI summary 覆盖规则引擎生成的模板摘要
+        summary = ai_result.get("summary", summary)
+
     md_path = target_dir / "诊断报告.md"
     html_path = target_dir / "诊断报告.html"
 
-    md_path.write_text(render_markdown(data, issue_names, scores, layout, items, actions, summary), encoding="utf-8")
-    html_path.write_text(render_html(data, issue_names, scores, layout, items, actions, photo_assets, summary), encoding="utf-8")
+    md_path.write_text(
+        render_markdown(data, issue_names, scores, layout, items, actions, summary, ai_result),
+        encoding="utf-8",
+    )
+    html_path.write_text(
+        render_html(data, issue_names, scores, layout, items, actions, photo_assets, summary, ai_result),
+        encoding="utf-8",
+    )
 
     print(f"✅ 报告已生成：{md_path}")
     print(f"✅ 报告已生成：{html_path}")
