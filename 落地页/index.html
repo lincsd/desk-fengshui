@@ -385,7 +385,7 @@
     <h1>打工人桌面玄学</h1>
     <p class="subtitle">想让桌面更顺眼、更舒服，也更有一点属于自己的好运氛围。<br>这里给你的不是夸张摆件感，而是更轻盈、耐看、适合日常办公的开运思路。</p>
     <div class="hero-actions">
-        <a class="card-btn primary consult-link" href="../咨询服务/客户信息收集表_网页版.html" style="max-width: 260px;">填写资料并预约</a>
+        <a class="card-btn primary consult-link" href="https://desk-fengshui-production.up.railway.app/咨询服务/客户信息收集表_服务器版.html" style="max-width: 260px;">填写资料并预约</a>
         <a class="card-btn" id="aiChatHeroLink" href="../咨询服务/ai_chat.html" style="max-width: 260px;">先和 AI 顾问聊聊</a>
     </div>
     <div class="stats">
@@ -439,7 +439,7 @@
                 <li>1次免费追问</li>
                 <li>24小时内交付</li>
             </ul>
-            <a class="card-btn primary consult-link" href="../咨询服务/客户信息收集表_网页版.html">填写资料并预约</a>
+            <a class="card-btn primary consult-link" href="https://desk-fengshui-production.up.railway.app/咨询服务/客户信息收集表_服务器版.html">填写资料并预约</a>
         </div>
 
         <!-- 高级咨询 -->
@@ -455,7 +455,7 @@
                 <li>赠送电子书一份</li>
                 <li>优先响应</li>
             </ul>
-            <a class="card-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">填写资料并预约</a>
+            <a class="card-btn consult-link" href="https://desk-fengshui-production.up.railway.app/咨询服务/客户信息收集表_服务器版.html">填写资料并预约</a>
         </div>
     </div>
     <p class="flow-tip">提交表单后，页面会自动引导到支付页面，完成预约后进入诊断安排。</p>
@@ -567,7 +567,7 @@
 <section class="cta" id="contact">
     <h2>准备把工位变得更顺眼一点了吗？</h2>
     <p>从今天开始，把桌面慢慢调整成更适合自己的样子。<br>不需要很夸张，也可以悄悄变得更舒服、更有状态。</p>
-    <a class="cta-btn consult-link" href="../咨询服务/客户信息收集表_网页版.html">📱 立即填写资料并预约</a>
+    <a class="cta-btn consult-link" href="https://desk-fengshui-production.up.railway.app/咨询服务/客户信息收集表_服务器版.html">📱 立即填写资料并预约</a>
     <div class="cta-links">
         <a class="cta-link" id="aiChatFooterLink" href="../咨询服务/ai_chat.html">先问问 AI 顾问</a>
         <a class="cta-link" id="ebookLinkFooter" href="../电子书/打工人办公桌开运指南_精装版.html">先看看电子书</a>
@@ -585,7 +585,7 @@
     fetch('../public_links.json')
         .then(resp => resp.ok ? resp.json() : Promise.reject(new Error('link config not found')))
         .then(config => {
-            const consultUrl = config.consult_form_url || '../咨询服务/客户信息收集表_网页版.html';
+            const consultUrl = config.consult_form_url || 'https://desk-fengshui-production.up.railway.app/咨询服务/客户信息收集表_服务器版.html';
             const aiChatUrl = config.ai_chat_url || '../咨询服务/ai_chat.html';
             const ebookUrl = config.ebook_url || '../电子书/打工人办公桌开运指南_精装版.html';
             const queueUrl = config.queue_page_url || '../咨询服务/购买后须知.html';
