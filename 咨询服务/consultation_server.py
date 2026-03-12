@@ -32,8 +32,11 @@ from urllib.parse import unquote, urlencode
 
 BASE_DIR = Path(__file__).parent
 ROOT_DIR = BASE_DIR.parent.parent
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
+# 云端部署时（如 Railway），utils/ 和 prompts/ 放在脚本的上一级目录
+_SEARCH_DIRS = [ROOT_DIR, BASE_DIR.parent]
+_UTILS_ROOT = next((d for d in _SEARCH_DIRS if (d / "utils").exists()), ROOT_DIR)
+if str(_UTILS_ROOT) not in sys.path:
+    sys.path.insert(0, str(_UTILS_ROOT))
 
 from utils import GeminiClient
 
@@ -51,7 +54,11 @@ DONE_DIR = BASE_DIR / "客户档案" / "已完成"
 PHOTO_DIR = BASE_DIR / "客户档案" / "照片"
 OUTPUT_DIR = BASE_DIR / "输出报告"
 DASHBOARD_PATH = BASE_DIR / "客户管理面板.html"
-AI_PROMPT_FILE = ROOT_DIR / "prompts" / "desk_ai_prompt.txt"
+AI_PROMPT_FILE = next(
+    (d / "prompts" / "desk_ai_prompt.txt" for d in _SEARCH_DIRS
+     if (d / "prompts" / "desk_ai_prompt.txt").exists()),
+    ROOT_DIR / "prompts" / "desk_ai_prompt.txt"  # 默认（本地）
+)
 
 # 服务档位对应价格
 TIER_PRICES = {
@@ -572,11 +579,12 @@ def generate_server_form(port: int) -> str:
     return enhanced
 def main():
     parser = argparse.ArgumentParser(description="本地咨询服务器")
-    parser.add_argument("--port", type=int, default=8899, help="端口号 (默认: 8899)")
+    parser.add_argument("--port", type=int, default=None, help="端口号 (默认: 8899)")
     parser.add_argument("--no-open", action="store_true", help="不自动打开浏览器")
     args = parser.parse_args()
 
-    port = args.port
+    # Railway/云平台用 PORT 环境变量，本地用 --port 参数，兜底 8899
+    port = args.port or int(os.environ.get("PORT", 8899))
 
     # 生成增强版表单
     enhanced_form = generate_server_form(port)
